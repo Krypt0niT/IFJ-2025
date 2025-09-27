@@ -47,6 +47,12 @@ typedef enum {
     TOKEN_EQ,       // ==
     TOKEN_NE,       // !=
 
+    // --- Zatvorky ---
+    TOKEN_LEFT_PAREN,   // (
+    TOKEN_RIGHT_PAREN,  // )
+    TOKEN_LEFT_BRACE,   // {
+    TOKEN_RIGHT_BRACE,  // }
+
     // --- KOniec riadku ---
     TOKEN_LINE_END,
 
