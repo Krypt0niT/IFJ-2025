@@ -30,4 +30,4 @@ int tokenize(const char* source, int source_length, Token** out_tokens, int* out
  *
  * @param token Pointer to the Token to dispose.
  */
-int tokenize(const char* source, Token** out_tokens, int* out_count);
+void dispose_token(Token *token);
