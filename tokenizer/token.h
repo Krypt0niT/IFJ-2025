@@ -24,6 +24,9 @@ typedef enum {
     // --- Identifikator ---
     TOKEN_ID,
 
+    // --- Priradenie ---
+    TOKEN_ASSIGN,
+
     // --- Globalna premenna
     TOKEN_GLOBAL_VAR,
 
