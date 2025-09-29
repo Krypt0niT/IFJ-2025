@@ -20,13 +20,13 @@ int compareTokens(const Token* a, const Token* b);
 char *test1_name = "Simple assignment";
 char *test1_input = "var x = y + 10\n";
 Token test1_expectation[] = {
-    {TOKEN_VAR, "var"},
+    {TOKEN_VAR, NULL},
     {TOKEN_ID, "x"},
-    {TOKEN_ASSIGN, "="},
+    {TOKEN_ASSIGN, NULL},
     {TOKEN_ID, "y"},
-    {TOKEN_PLUS, "+"},
+    {TOKEN_PLUS, NULL},
     {TOKEN_INT_LITERAL, "10"},
-    {TOKEN_LINE_END, "\n"}
+    {TOKEN_LINE_END, NULL}
 };
 int test1_count = 7;
 
@@ -50,7 +50,7 @@ int main() {
 }
 
 int runLexerTest(const LexerTest* test) {
-    Token* tokens = NULL;
+    Token** tokens = NULL;
     int count = 0;
     if (tokenize(test->source, test->source_length, &tokens, &count) != 0) {
         printf("[%s] Lexer error!\n", test->name);
@@ -63,7 +63,7 @@ int runLexerTest(const LexerTest* test) {
     }
 
     for (int i = 0; i < count; i++) {
-        if (!compareTokens(&tokens[i], &test->expected[i])) {
+        if (!compareTokens(tokens[i], &test->expected[i])) {
             printf("[%s] Token mismatch at index %d\n", test->name, i);
             return 0;
         }
@@ -72,7 +72,7 @@ int runLexerTest(const LexerTest* test) {
     printf("[%s] Test passed!\n", test->name);
 
     // uvolnenie pamate
-    for (int i = 0; i < count; i++) dispose_token(&tokens[i]);
+    for (int i = 0; i < count; i++) dispose_token(tokens[i]);
     free(tokens);
 
     return 1;

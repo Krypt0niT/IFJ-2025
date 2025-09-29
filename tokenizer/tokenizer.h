@@ -19,7 +19,7 @@
  *
  * @note The caller is responsible for freeing the memory allocated for the tokens array.
  */
-int tokenize(const char* source, int source_length, Token** out_tokens, int* out_count);
+int tokenize(const char* source, int source_length, Token*** out_tokens, int* out_count);
 
 
 /**
