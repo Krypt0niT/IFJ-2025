@@ -8,12 +8,13 @@ TARGET = tokenizer_tests
 
 # Zdrojové súbory
 SRC = tokenizer.c tests/tokenizer_tests.c
+UTILS = $(wildcard ../utilities/*.c)
 
 # Hlavičkové súbory
 HEADERS = tokenizer.h token.h
 
 # Výsledný objekt
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:.c=.o) $(UTILS:.c=.o)
 
 all: $(TARGET)
 
