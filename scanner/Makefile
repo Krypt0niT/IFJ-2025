@@ -4,14 +4,14 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g
 
 # Ciele
-TARGET = tokenizer_tests
+TARGET = scanner_tests
 
 # Zdrojové súbory
-SRC = tokenizer.c tests/tokenizer_tests.c
+SRC = scanner.c tests/scanner_tests.c
 UTILS = $(wildcard ../utilities/*.c)
 
 # Hlavičkové súbory
-HEADERS = tokenizer.h token.h
+HEADERS = scanner.h token.h
 
 # Výsledný objekt
 OBJ = $(SRC:.c=.o) $(UTILS:.c=.o)

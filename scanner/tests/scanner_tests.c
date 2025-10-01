@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../token.h"
-#include "../tokenizer.h"
+#include "../scanner.h"
 
 typedef struct {
     const char* name;      // názov testu
@@ -15,6 +15,7 @@ typedef struct {
 
 int runLexerTest(const LexerTest* test);
 int compareTokens(const Token* a, const Token* b);
+void print_tokens(Token **tokens, int length);
 
 // --- TEST 1 --- 
 char *test1_name = "Simple assignment";
@@ -56,6 +57,8 @@ int runLexerTest(const LexerTest* test) {
         printf("[%s] Lexer error!\n", test->name);
         return 0;
     }
+    printf("result tokens: %i\n", tokens);
+    print_tokens(tokens, count);
 
     if (count != test->expected_count) {
         printf("[%s] Token count mismatch (%d != %d)\n", test->name, count, test->expected_count);
@@ -85,4 +88,16 @@ int compareTokens(const Token* a, const Token* b) {
     if (a->value && b->value && strcmp(a->value, b->value) != 0)
         return 0;
     return 1;
+}
+
+void print_tokens(Token **tokens, int length) {
+    for (int i = 0; i < length; i++) {
+        if (tokens[i] == NULL) {
+            continue;
+        }
+        printf("[%d] type=%d, value=\"%s\"\n",
+               i,
+               tokens[i]->type,
+               "zatial nic");
+    }
 }

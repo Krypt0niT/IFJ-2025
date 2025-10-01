@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "tokenizer.h"
+#include "scanner.h"
 #include "../utilities/trim.h"
 
 Token* get_simple_token(TokenType token_type);
