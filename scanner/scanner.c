@@ -73,7 +73,8 @@ void scanner_init(FILE *input_file) {
 
 int get_next_token(Token **out_token) {
     if (__input_file == NULL) {
-        return NULL;
+        // TODO zistit typ chyby
+        return 99;
     }
 
     int word_buffer_size = 10;
@@ -95,19 +96,16 @@ int get_next_token(Token **out_token) {
             if (new_character == '"') automat_state = STATE_STRING;
         }
         
-        char *trimmed_buffer = trim(__word_buffer);
-
         if (automat_state == STATE_TEXT) {
             if (is_valid_text_symbol(new_character) == 0) {
-                //ungetc(new_character, __input_file);
-                // skontroluj ci nieje identifikator
-                // 
-                TokenType *reserved_word = string_to_token_type(trimmed_buffer);
+                ungetc(new_character, __input_file);
+
+                TokenType *reserved_word = string_to_token_type(__word_buffer);
                 if (reserved_word != NULL) {
                     return success_empty_token(*reserved_word, out_token); 
                 }
 
-                return success_token(TOKEN_ID, trimmed_buffer, out_token); 
+                return success_token(TOKEN_ID, __word_buffer, out_token); 
             }
         }
 
@@ -115,14 +113,13 @@ int get_next_token(Token **out_token) {
             if (isdigit(new_character) == 0 && isalpha(new_character) == 0) {
                 ungetc(new_character, __input_file);
                 //TODO: 
-                
-                return success_token(TOKEN_INT_LITERAL, trimmed_buffer, out_token); 
+                return success_token(TOKEN_INT_LITERAL, __word_buffer, out_token); 
             }
         }
 
         if (automat_state == STATE_SYMBOL) {
             if (isdigit(new_character) != 0 || isalpha(new_character) != 0 || new_character == ' ') {
-                //ungetc(new_character, __input_file);
+                ungetc(new_character, __input_file);
                 //TODO: opravit
                 if (strcmp("=", __word_buffer) == 0) return success_empty_token(TOKEN_ASSIGN, out_token); 
                 if (strcmp("==", __word_buffer) == 0) return success_empty_token(TOKEN_EQ, out_token);
@@ -157,6 +154,10 @@ int get_next_token(Token **out_token) {
         }
         __word_buffer[word_length - 1] = new_character;
         __word_buffer[word_length] = '\0';
+
+        __word_buffer = trim(__word_buffer);
+        word_length = strlen(__word_buffer);
+
     }
     // TODO
     return 99;
