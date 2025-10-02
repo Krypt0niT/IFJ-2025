@@ -156,7 +156,7 @@ int test9_expected_count = 9;
 
 // --- TEST Complex identifiers ---
 char *test10_name = "(10) Complex identifiers";
-char *test10_input = "var _abc = 1\nvar XYZ_123 = 2\n";
+char *test10_input = "var _abc = 1\nvar XYZ__123 = 2\n";
 Token test10_expectation[] = {
     {TOKEN_VAR, NULL},
     {TOKEN_ID, "_abc"},
@@ -164,7 +164,7 @@ Token test10_expectation[] = {
     {TOKEN_INT_LITERAL, "1"},
     {TOKEN_LINE_END, NULL},
     {TOKEN_VAR, NULL},
-    {TOKEN_ID, "XYZ_123"},
+    {TOKEN_ID, "XYZ__123"},
     {TOKEN_ASSIGN, NULL},
     {TOKEN_INT_LITERAL, "2"},
     {TOKEN_LINE_END, NULL}
@@ -172,18 +172,18 @@ Token test10_expectation[] = {
 int test10_expected_count = 10;
 
 char *test11_name = "(11) String literals";
-char *test11_input = "var s = \"Hello\\n\"W'orld\\\x22\"\n";     // "\\" = "\"   a     "\x22" = 34 = "
+char *test11_input = "var s = \"Ahoj\\n\\\"Sve'te \\\\\\x22\"\n";     // "\\" = "\"        "\x22" = 34 = "
 Token test11_expectation[] = {
     {TOKEN_VAR, NULL},
     {TOKEN_ID, "s"},
     {TOKEN_ASSIGN, NULL},
-    {TOKEN_STRING_LITERAL, "Hello\n\"W'orld\""},
+    {TOKEN_STRING_LITERAL, "Ahoj\n\"Sve'te \\\""},
     {TOKEN_LINE_END, NULL}
 };
 int test11_expected_count = 5;
 
 char *test12_name = "(12) Empty string and string with \n";
-char *test12_input = "var s = \"\"\nvar space = \"\n\"\n";
+char *test12_input = "var s = \"\"\nvar space = \"\\n\"\n";
 Token test12_expectation[] = {
     {TOKEN_VAR, NULL},
     {TOKEN_ID, "s"},
@@ -421,8 +421,23 @@ int test23_expected_count = 16;
 
 // --- TEST Ifj vstavane funkcie ---
 char *test24_name = "(24) Ifj vstavane funkcie";
-char *test24_input = "Ifj.write(x)\nIfj .  read_num()\nIfj.\tread_str()\n\nIfj.floor()\nIfj.str()\nIfj.\nlength()\nIfj.substring\nIfj.\n\nstrcmp(\n)\nIfj.\t\tord()\nIfj.chr()\n";
-Token test24_expectation[] = {
+char *test24_input = 
+    "Ifj.write(x)\n"
+    "Ifj .  read_num()\n"
+    "Ifj.\tread_str()\n"
+    "\n"
+    "Ifj.floor()\n"
+    "Ifj.str()\n"
+    "Ifj.\n"
+    "length()\n"
+    "Ifj.substring\n"
+    "Ifj.\n"
+    "\n"
+    "strcmp(\n"
+    ")\n"
+    "Ifj.\t\tord()\n"
+    "Ifj.chr()\n";
+    Token test24_expectation[] = {
     {TOKEN_IFJ, "write"},
     {TOKEN_LEFT_PAREN, NULL},
     {TOKEN_ID, "x"},
@@ -430,7 +445,7 @@ Token test24_expectation[] = {
     {TOKEN_LINE_END, NULL},
     {TOKEN_IFJ, "read_num"},
     {TOKEN_LEFT_PAREN, NULL},
-    {TOKEN_RIGHT_PAREN, NULL}, //8
+    {TOKEN_RIGHT_PAREN, NULL},
     {TOKEN_LINE_END, NULL},
     {TOKEN_IFJ, "read_str"},
     {TOKEN_LEFT_PAREN, NULL},
@@ -506,4 +521,57 @@ Token test26_expectation[] = {
     {TOKEN_LINE_END, NULL}
 };
 int test26_expected_count = 5;
+// ------------
+
+// --- TEST Line comment ---
+char *test27_name = "(27) Line comment";
+char *test27_input = "var x = 1 // toto je komentar\nvar y = 2\n";
+Token test27_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "y"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "2"},
+    {TOKEN_LINE_END, NULL}
+};
+int test27_expected_count = 10;
+// ------------
+
+// --- TEST Block comment single line ---
+char *test28_name = "(28) Block comment single line";
+char *test28_input = "var x = 1 /* komentar */ var y = 2\n";
+Token test28_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "y"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "2"},
+    {TOKEN_LINE_END, NULL}
+};
+int test28_expected_count = 9;
+// ------------
+
+// --- TEST Block comment multiline ---
+char *test29_name = "(29) Block comment multiline";
+char *test29_input = "var a = 1\n/* komentar\n na viac riadkov */\nvar b = 2\n";
+Token test29_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "a"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "b"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "2"},
+    {TOKEN_LINE_END, NULL}
+};
+int test29_expected_count = 10;
 // ------------

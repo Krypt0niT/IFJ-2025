@@ -37,6 +37,9 @@ int main() {
         {test24_name, test24_input, test24_expectation, test24_expected_count},
         {test25_name, test25_input, test25_expectation, test25_expected_count},
         {test26_name, test26_input, test26_expectation, test26_expected_count},
+        {test27_name, test27_input, test27_expectation, test27_expected_count},
+        {test28_name, test28_input, test28_expectation, test28_expected_count},
+        {test29_name, test29_input, test29_expectation, test29_expected_count},
     };
 
     int total = sizeof(tests)/sizeof(tests[0]);
