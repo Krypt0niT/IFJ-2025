@@ -37,11 +37,14 @@ typedef enum {
 } StateType;
 
 TokenType* string_to_token_type(char* str);
+TokenType get_num_literal_type(char* str);
 Token* get_empty_token(TokenType token_type);
 Token* get_token(TokenType token_type, char *value);
 int success_empty_token(TokenType token_type, Token **out_token);
 int success_token(TokenType token_type, char *value, Token **out_token);
 int is_valid_text_symbol(char c);
+int is_valid_num_symbol(char c);
+int contains(char *array, char a);
 
 void dispose_token(Token *token) {
     free(token->value);
@@ -86,14 +89,27 @@ int get_next_token(Token **out_token) {
     while ((c = getc(__input_file)) != EOF) {
         char new_character = c;
 
-        if (word_length == 0 && new_character == '\n') return success_empty_token(TOKEN_LINE_END, out_token); 
+        //printf("znak:'%c' string:'%s' stav:'%i'\n",new_character,__word_buffer, automat_state);
 
-        // ten new character asi inak zariadit
-        if (automat_state == STATE_NONE && new_character != ' ') {
-            if (isalpha(new_character) != 0) automat_state = STATE_TEXT;
-            if (isdigit(new_character) != 0) automat_state = STATE_NUM;
-            if (isdigit(new_character) == 0 && isalpha(new_character) == 0) automat_state = STATE_SYMBOL;
-            if (new_character == '"') automat_state = STATE_STRING;
+        // AGRESIVNE ZNAKY
+        if (word_length == 0) {
+            if (new_character == '\n') {
+                while ((c = getc(__input_file)) == '\n');
+                ungetc(c, __input_file);
+                return success_empty_token(TOKEN_LINE_END, out_token);
+            }
+            if (new_character == '(') return success_empty_token(TOKEN_LEFT_PAREN, out_token);
+            if (new_character == ')') return success_empty_token(TOKEN_RIGHT_PAREN, out_token);
+            if (new_character == '{') return success_empty_token(TOKEN_LEFT_BRACE, out_token);
+            if (new_character == '}') return success_empty_token(TOKEN_RIGHT_BRACE, out_token);
+        }
+
+        // Defines how words start
+        if (automat_state == STATE_NONE && !isspace(new_character) && new_character != ',') {
+            if (isalpha(new_character) != 0 || new_character == '_') automat_state = STATE_TEXT;
+            else if (isdigit(new_character) != 0) automat_state = STATE_NUM;
+            else if (new_character == '"') automat_state = STATE_STRING;
+            else if (isdigit(new_character) == 0 && isalpha(new_character) == 0) automat_state = STATE_SYMBOL;
         }
         
         if (automat_state == STATE_TEXT) {
@@ -105,15 +121,20 @@ int get_next_token(Token **out_token) {
                     return success_empty_token(*reserved_word, out_token); 
                 }
 
-                return success_token(TOKEN_ID, __word_buffer, out_token); 
+                // Global indentificator
+                if (strncmp("__", __word_buffer, 2) == 0) {
+                    return success_token(TOKEN_GLOBAL_VAR, __word_buffer, out_token); 
+                }
+                return success_token(TOKEN_ID, __word_buffer, out_token);
             }
         }
 
         if (automat_state == STATE_NUM) {
-            if (isdigit(new_character) == 0 && isalpha(new_character) == 0) {
+            if (is_valid_num_symbol(new_character) == 0) {
                 ungetc(new_character, __input_file);
-                //TODO: 
-                return success_token(TOKEN_INT_LITERAL, __word_buffer, out_token); 
+                //TODO: return ci chyba alebo dobre format
+                TokenType token_type = get_num_literal_type(__word_buffer);
+                return success_token(token_type, __word_buffer, out_token); 
             }
         }
 
@@ -131,23 +152,10 @@ int get_next_token(Token **out_token) {
                 if (strcmp("+", __word_buffer) == 0) return success_empty_token(TOKEN_PLUS, out_token);
                 if (strcmp("-", __word_buffer) == 0) return success_empty_token(TOKEN_MINUS, out_token);
                 if (strcmp("/", __word_buffer) == 0) return success_empty_token(TOKEN_DIV, out_token);
+                if (strcmp("*", __word_buffer) == 0) return success_empty_token(TOKEN_MUL, out_token);
 
                 if (strcmp("/*", __word_buffer) == 0) /* UF */return success_empty_token(TOKEN_DIV, out_token);
                 if (strcmp("*/", __word_buffer) == 0) /* UF */return success_empty_token(TOKEN_DIV, out_token);
-
-                switch (new_character)
-                {
-                    case '*':
-                        return success_empty_token(TOKEN_MUL, out_token); 
-                    case '(':
-                        return success_empty_token(TOKEN_LEFT_PAREN, out_token); 
-                    case ')':
-                        return success_empty_token(TOKEN_RIGHT_PAREN, out_token); 
-                    case '{':
-                        return success_empty_token(TOKEN_LEFT_BRACE, out_token); 
-                    case '}':
-                        return success_empty_token(TOKEN_RIGHT_BRACE, out_token); 
-                }
             }
         }
 
@@ -198,5 +206,51 @@ int success_token(TokenType token_type, char *value, Token **out_token) {
 
 int is_valid_text_symbol(char c) {
     if (isdigit(c) != 0 || isalpha(c) != 0 || c == '_') return 1;
+    return 0;
+}
+
+// TODO separate valid sybols
+int is_valid_num_symbol(char c) {
+    if (isdigit(c) != 0 || 
+        c == 'e' || 
+        c == 'E' || 
+        c == '+' || 
+        c == '-' ||
+        c == '.' ||
+        c == 'x' ||
+        c == 'a' ||
+        c == 'b' ||
+        c == 'c' ||
+        c == 'd' ||
+        c == 'e' ||
+        c == 'f' ||
+        c == 'A' ||
+        c == 'B' ||
+        c == 'C' ||
+        c == 'D' ||
+        c == 'E' ||
+        c == 'F'
+    ) return 1;
+    return 0;
+}
+
+// TODO funkcionalita skontrolovania nevalidneho vstuppu cisla .h?
+TokenType get_num_literal_type(char* str) {
+    if (contains(str, '.') || contains(str, 'e') || contains(str, 'E')) {
+        return TOKEN_FLOAT_LITERAL;
+    }
+    if (contains(str, 'x')) {
+        return TOKEN_HEX_LITERAL;
+    }
+
+    return TOKEN_INT_LITERAL;
+}
+
+int contains(char *array, char a) {
+    int length = strlen(array);
+    for (int i = 0; i < length; i++)
+    {
+        if (array[i] == a) return 1;
+    }
     return 0;
 }
