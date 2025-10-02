@@ -264,7 +264,7 @@ int test15_expected_count = 7;
 
 // --- TEST If ---
 char *test16_name = "(16) If keyword, IS literal and String, Num token";
-char *test16_input = "if (x is String)\n{\n}\nif(s is Num)"; 
+char *test16_input = "if (x is String)\n{\n}\nif(s is Num)\n"; 
 Token test16_expectation[] = {
     {TOKEN_IF, NULL},
     {TOKEN_LEFT_PAREN, NULL},
@@ -283,8 +283,9 @@ Token test16_expectation[] = {
     {TOKEN_IS, NULL},
     {TOKEN_NUM, NULL},
     {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
 };
-int test16_expected_count = 17;
+int test16_expected_count = 18;
 
 // --- TEST Global var ---
 char *test17_name = "(17) Global var";
@@ -340,7 +341,7 @@ int test19_expected_count = 14;
 
 // --- TEST Return keyword ---
 char *test20_name = "(20) Return keyword";
-char *test20_input = "return foo(only_par, only_par)\nreturn x + y\nreturn\n";
+char *test20_input = "return foo(only_par,\n only_par)\nreturn x + y\nreturn\n";
 Token test20_expectation[] = {
     {TOKEN_RETURN, NULL},
     {TOKEN_ID, "foo"},
@@ -362,7 +363,7 @@ int test20_expected_count = 14;
 
 // --- TEST While keyword ---
 char *test21_name = "(21) While keyword";
-char *test21_input = "while (x > 0) { x = x - 1 }\n";
+char *test21_input = "while (x >\n 0) { x =\n x -\n 1 }\n";
 Token test21_expectation[] = {
     {TOKEN_WHILE, NULL},
     {TOKEN_LEFT_PAREN, NULL},
@@ -397,7 +398,7 @@ int test22_expected_count = 5;
 
 // --- TEST Static keyword ---
 char *test23_name = "(23) Static keyword";
-char *test23_input = "static main() { }\nstatic func(x){}\n";
+char *test23_input = "static main() { }\nstatic func(\nx){}\n";
 Token test23_expectation[] = {
     {TOKEN_STATIC, NULL},
     {TOKEN_ID, "main"},
@@ -420,7 +421,7 @@ int test23_expected_count = 16;
 
 // --- TEST Ifj vstavane funkcie ---
 char *test24_name = "(24) Ifj vstavane funkcie";
-char *test24_input = "Ifj.write(x)\nIfj . read_num()\n";
+char *test24_input = "Ifj.write(x)\nIfj .  read_num()\nIfj.\tread_str()\n\nIfj.floor()\nIfj.str()\nIfj.\nlength()\nIfj.substring\nIfj.\n\nstrcmp(\n)\nIfj.\t\tord()\nIfj.chr()\n";
 Token test24_expectation[] = {
     {TOKEN_IFJ, "write"},
     {TOKEN_LEFT_PAREN, NULL},
@@ -429,8 +430,80 @@ Token test24_expectation[] = {
     {TOKEN_LINE_END, NULL},
     {TOKEN_IFJ, "read_num"},
     {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL}, //8
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "read_str"},
+    {TOKEN_LEFT_PAREN, NULL},
     {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "floor"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "str"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "length"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "substring"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "strcmp"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "ord"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "chr"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL} 
+};
+int test24_expected_count = 41;
+// ------------
+
+// --- TEST Relational operators with numbers ---
+char *test25_name = "(25) Relational operators with numbers";
+char *test25_input = "1 < 2 3.5 > 2.1 10 <= 10 5 >= 5 0 == 0 1 != 0\n";
+Token test25_expectation[] = {
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_LT, NULL},
+    {TOKEN_INT_LITERAL, "2"},
+    {TOKEN_FLOAT_LITERAL, "3.5"},
+    {TOKEN_GT, NULL},
+    {TOKEN_FLOAT_LITERAL, "2.1"},
+    {TOKEN_INT_LITERAL, "10"},
+    {TOKEN_LE, NULL},
+    {TOKEN_INT_LITERAL, "10"},
+    {TOKEN_INT_LITERAL, "5"},
+    {TOKEN_GE, NULL},
+    {TOKEN_INT_LITERAL, "5"},
+    {TOKEN_INT_LITERAL, "0"},
+    {TOKEN_EQ, NULL},
+    {TOKEN_INT_LITERAL, "0"},
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_NE, NULL},
+    {TOKEN_INT_LITERAL, "0"},
     {TOKEN_LINE_END, NULL}
 };
-int test24_expected_count = 9;
+int test25_expected_count = 19;
+// ------------
+
+// --- TEST Multiline string literal ---
+char *test26_name = "(26) Multiline string literal";
+char *test26_input = "var x = \"\"\"A\nhoj s\\x22\"vete\n\"\"\"\n";
+Token test26_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_STRING_LITERAL, "A\nhoj s\\x22\"vete\n"},
+    {TOKEN_LINE_END, NULL}
+};
+int test26_expected_count = 5;
 // ------------
