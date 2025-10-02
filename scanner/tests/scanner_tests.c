@@ -1,41 +1,18 @@
 #include <stddef.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../token.h"
 #include "../scanner.h"
-
-typedef struct {
-    const char* name;      // názov testu
-    const char* source;    // vstupný zdroj
-    Token* expected;       // očakávané tokeny
-    int expected_count;    // počet očakávaných tokenov
-} LexerTest;
+#include "scanner_inputs.c"
 
 int runLexerTest(const LexerTest* test);
 int compareTokens(const Token* a, const Token* b);
 void print_token(Token *token);
 
-// --- TEST 1 --- 
-char *test1_name = "Simple assignment";
-char *test1_input = "var x = y + 10\n";
-Token test1_expectation[] = {
-    {TOKEN_VAR, NULL},
-    {TOKEN_ID, "x"},
-    {TOKEN_ASSIGN, NULL},
-    {TOKEN_ID, "y"},
-    {TOKEN_PLUS, NULL},
-    {TOKEN_INT_LITERAL, "10"},
-    {TOKEN_LINE_END, NULL}
-};
-int test1_expected_count = 7;
-
 int main() {
 
     LexerTest tests[] = {
-        // TEST 1 Job
         {test1_name, test1_input, test1_expectation, test1_expected_count},
-        // tu môzes pridat dalsie testy
+        {test2_name, test2_input, test2_expectation, test2_expected_count},
     };
 
     int total = sizeof(tests)/sizeof(tests[0]);
