@@ -83,7 +83,7 @@ Token test5_expectation[] = {
     {TOKEN_INT_LITERAL, "0.58e-4"},
     {TOKEN_LINE_END, NULL}
 };
-int test5_expected_count = 7;
+int test5_expected_count = 9;
 // ------------
 
 // --- TEST Hex nums --- 
@@ -100,7 +100,7 @@ Token test6_expectation[] = {
     {TOKEN_INT_LITERAL, "0xAA"},
     {TOKEN_LINE_END, NULL}
 };
-int test6_expected_count = 7;
+int test6_expected_count = 9;
 // ------------
 
 // --- TEST Multiple newlines collapse to single EOL ---
@@ -165,3 +165,29 @@ Token test10_expectation[] = {
 };
 int test10_expected_count = 10;
 
+char *test11_name = "String literals";
+char *test11_input = "var s = \"Hello\\n\"W'orld\\\x22\"\n";     // "\\" = "\"   a     "\x22" = 34 = "
+Token test11_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "s"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_STRING_LITERAL, "Hello\n\"W'orld\""},
+    {TOKEN_LINE_END, NULL}
+};
+int test11_expected_count = 5;
+
+char *test12_name = "Empty string and string with \n";
+char *test12_input = "var s = \"\"\nvar space = \"\n\"\n";
+Token test12_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "s"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_STRING_LITERAL, ""},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "space"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_STRING_LITERAL, "\n"},
+    {TOKEN_LINE_END, NULL}
+};
+int test12_expected_count = 10;
