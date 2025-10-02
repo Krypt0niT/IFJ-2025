@@ -38,3 +38,18 @@ Token test2_expectation[] = {
 };
 int test2_expected_count = 7;
 // ------------
+
+// --- TEST 3 --- 
+char *test3_name = "Whitespace troubleshooting";
+char *test3_input = "   var    x=a +  10\n ";
+Token test3_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_ID, "a"},
+    {TOKEN_PLUS, NULL},
+    {TOKEN_INT_LITERAL, "10"},
+    {TOKEN_LINE_END, NULL}
+};
+int test3_expected_count = 7;
+// ------------

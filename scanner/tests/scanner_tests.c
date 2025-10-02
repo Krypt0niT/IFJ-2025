@@ -13,6 +13,8 @@ int main() {
     LexerTest tests[] = {
         {test1_name, test1_input, test1_expectation, test1_expected_count},
         {test2_name, test2_input, test2_expectation, test2_expected_count},
+        {test3_name, test3_input, test3_expectation, test3_expected_count},
+
     };
 
     int total = sizeof(tests)/sizeof(tests[0]);
