@@ -36,7 +36,7 @@ typedef enum {
 
 } StateType;
 
-TokenType *string_to_token_type(const char* str);
+TokenType* string_to_token_type(char* str);
 Token* get_empty_token(TokenType token_type);
 Token* get_token(TokenType token_type, char *value);
 int success_empty_token(TokenType token_type, Token **out_token);
@@ -173,13 +173,13 @@ int get_next_token(Token **out_token) {
     return 99;
 }
 
-TokenType *string_to_token_type(const char* str) {
+TokenType *string_to_token_type(char* str) {
     for (size_t i = 0; i < sizeof(tokenInfos)/sizeof(tokenInfos[0]); i++) {
         if (strcmp(tokenInfos[i].name, str) == 0) {
             return &tokenInfos[i].type;
         }
     }
-    return NULL; // alebo iný default pre neznámy token
+    return NULL;
 }
 
 int success_empty_token(TokenType token_type, Token **out_token) {

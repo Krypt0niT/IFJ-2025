@@ -37,7 +37,7 @@ int main() {
 int runLexerTest(const LexerTest* test) {
 
     FILE *f = tmpfile();
-    if (!f) return NULL;
+    if (!f) return 1;
 
     fwrite(test->source, 1, strlen(test->source), f);
     rewind(f);
