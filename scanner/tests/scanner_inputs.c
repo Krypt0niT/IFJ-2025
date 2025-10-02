@@ -102,3 +102,66 @@ Token test6_expectation[] = {
 };
 int test6_expected_count = 7;
 // ------------
+
+// --- TEST Multiple newlines collapse to single EOL ---
+char *test7_name = "Multiple newlines collapse to single EOL";
+char *test7_input = "\tvar a = 1\n\n\nvar b = 2\n";
+Token test7_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "a"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "b"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "2"},
+    {TOKEN_LINE_END, NULL}
+};
+int test7_expected_count = 10;
+// ------------
+
+// --- TEST Keyword-like identifiers ---
+char *test8_name = "Keyword-like identifiers";
+char *test8_input = "var varx = 10\nifx1 = 20\n";
+Token test8_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "varx"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "10"},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_ID, "ifx1"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "20"},
+    {TOKEN_LINE_END, NULL}
+};
+int test8_expected_count = 9;
+
+// --- TEST Leading zeros ---
+char *test9_name = "Leading zeros";
+char *test9_input = "var a = 012\n";
+Token test9_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "a"},
+    {TOKEN_ASSIGN, NULL},
+    // ocakavana chyba
+};
+int test9_expected_count = 3;
+
+// --- TEST Complex identifiers ---
+char *test10_name = "Complex identifiers";
+char *test10_input = "var _abc = 1\nvar XYZ_123 = 2\n";
+Token test10_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "_abc"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "XYZ_123"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_INT_LITERAL, "2"},
+    {TOKEN_LINE_END, NULL}
+};
+int test10_expected_count = 10;
+
