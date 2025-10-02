@@ -417,3 +417,20 @@ Token test23_expectation[] = {
 };
 int test23_expected_count = 16;
 // ------------
+
+// --- TEST Ifj vstavane funkcie ---
+char *test24_name = "(24) Ifj vstavane funkcie";
+char *test24_input = "Ifj.write(x)\nIfj . read_num()\n";
+Token test24_expectation[] = {
+    {TOKEN_IFJ, "write"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IFJ, "read_num"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL}
+};
+int test24_expected_count = 9;
+// ------------

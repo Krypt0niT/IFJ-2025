@@ -34,6 +34,7 @@ int main() {
         {test21_name, test21_input, test21_expectation, test21_expected_count},
         {test22_name, test22_input, test22_expectation, test22_expected_count},
         {test23_name, test23_input, test23_expectation, test23_expected_count},
+        {test24_name, test24_input, test24_expectation, test24_expected_count},
     };
 
     int total = sizeof(tests)/sizeof(tests[0]);
@@ -95,7 +96,8 @@ int runLexerTest(const LexerTest* test) {
     }
 
     if (success) {
-        printf("[%s] Test passed!\n", test->name);
+        printf("\033[0;32m[%s] Test passed!\033[0m\n", test->name);
+
     }
 
     fclose(f);
