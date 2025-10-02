@@ -8,14 +8,13 @@
 typedef struct {
     const char* name;      // názov testu
     const char* source;    // vstupný zdroj
-    int source_length;     // dlzka vstupu
     Token* expected;       // očakávané tokeny
     int expected_count;    // počet očakávaných tokenov
 } LexerTest;
 
 int runLexerTest(const LexerTest* test);
 int compareTokens(const Token* a, const Token* b);
-void print_tokens(Token **tokens, int length);
+void print_token(Token *token);
 
 // --- TEST 1 --- 
 char *test1_name = "Simple assignment";
@@ -29,13 +28,13 @@ Token test1_expectation[] = {
     {TOKEN_INT_LITERAL, "10"},
     {TOKEN_LINE_END, NULL}
 };
-int test1_count = 7;
+int test1_expected_count = 7;
 
 int main() {
 
     LexerTest tests[] = {
         // TEST 1 Job
-        {test1_name, test1_input, (int)strlen(test1_input), test1_expectation, test1_count},
+        {test1_name, test1_input, test1_expectation, test1_expected_count},
         // tu môzes pridat dalsie testy
     };
 
@@ -51,34 +50,58 @@ int main() {
 }
 
 int runLexerTest(const LexerTest* test) {
-    Token** tokens = NULL;
-    int count = 0;
-    if (tokenize(test->source, test->source_length, &tokens, &count) != 0) {
-        printf("[%s] Lexer error!\n", test->name);
+
+    FILE *f = tmpfile();
+    if (!f) return NULL;
+
+    fwrite(test->source, 1, strlen(test->source), f);
+    rewind(f);
+
+    if (!f) {
+        perror("fmemopen");
         return 0;
     }
-    printf("result tokens: %i\n", tokens);
-    print_tokens(tokens, count);
+    scanner_init(f);
 
-    if (count != test->expected_count) {
-        printf("[%s] Token count mismatch (%d != %d)\n", test->name, count, test->expected_count);
-        return 0;
-    }
+    int success = 1; // predpokladáme úspech
 
-    for (int i = 0; i < count; i++) {
-        if (!compareTokens(tokens[i], &test->expected[i])) {
+    for (int i = 0; i < test->expected_count; i++) {
+        Token *tok = NULL;
+        if (get_next_token(&tok) != 0) {
+            printf("[%s] Unexpected end of input at token %d\n", test->name, i);
+            success = 0;
+            break;
+        }
+
+        if (!compareTokens(tok, &test->expected[i])) {
             printf("[%s] Token mismatch at index %d\n", test->name, i);
-            return 0;
+            printf("Expected: "); print_token(&test->expected[i]);
+            printf("Got:      "); print_token(tok);
+            success = 0;
+            dispose_token(tok);
+            break;
+        }
+
+        dispose_token(tok); // uvoľníme ihneď
+    }
+
+    // skontrolujeme, či nie sú ďalšie neočakávané tokeny
+    if (success) {
+        Token *tok = NULL;
+        if (get_next_token(&tok) == 0) {
+            printf("[%s] Extra unexpected token after expected tokens:\n", test->name);
+            print_token(tok);
+            dispose_token(tok);
+            success = 0;
         }
     }
 
-    printf("[%s] Test passed!\n", test->name);
+    if (success) {
+        printf("[%s] Test passed!\n", test->name);
+    }
 
-    // uvolnenie pamate
-    for (int i = 0; i < count; i++) dispose_token(tokens[i]);
-    free(tokens);
-
-    return 1;
+    fclose(f);
+    return success;
 }
 
 int compareTokens(const Token* a, const Token* b) {
@@ -90,14 +113,11 @@ int compareTokens(const Token* a, const Token* b) {
     return 1;
 }
 
-void print_tokens(Token **tokens, int length) {
-    for (int i = 0; i < length; i++) {
-        if (tokens[i] == NULL) {
-            continue;
-        }
-        printf("[%d] type=%d, value=\"%s\"\n",
-               i,
-               tokens[i]->type,
-               "zatial nic");
+void print_token(Token *token) {
+    if (token == NULL) {
+        return;
     }
+    printf("type=%d, value=\"%s\"\n",
+            token->type,
+            token->value);
 }
