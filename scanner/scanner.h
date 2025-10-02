@@ -1,4 +1,5 @@
 #include "token.h"
+#include <stdio.h>
 
 /**
  * @brief Lexical analyzer (tokenizer) for source code.
@@ -19,7 +20,7 @@
  *
  * @note The caller is responsible for freeing the memory allocated for the tokens array.
  */
-int tokenize(const char* source, int source_length, Token*** out_tokens, int* out_count);
+//int tokenize(const char* source, int source_length, Token*** out_tokens, int* out_count);
 
 
 /**
@@ -31,3 +32,8 @@ int tokenize(const char* source, int source_length, Token*** out_tokens, int* ou
  * @param token Pointer to the Token to dispose.
  */
 void dispose_token(Token *token);
+
+
+void scanner_init(FILE *input_file);
+
+int get_next_token(Token **out_token);
