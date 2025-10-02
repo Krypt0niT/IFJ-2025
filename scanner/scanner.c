@@ -123,7 +123,17 @@ int get_next_token(Token **out_token) {
                 //TODO: opravit
                 if (strcmp("=", __word_buffer) == 0) return success_empty_token(TOKEN_ASSIGN, out_token); 
                 if (strcmp("==", __word_buffer) == 0) return success_empty_token(TOKEN_EQ, out_token);
+                if (strcmp("!=", __word_buffer) == 0) return success_empty_token(TOKEN_NE, out_token);
+                if (strcmp("<", __word_buffer) == 0) return success_empty_token(TOKEN_LT, out_token);
+                if (strcmp("<=", __word_buffer) == 0) return success_empty_token(TOKEN_LE, out_token);
+                if (strcmp(">", __word_buffer) == 0) return success_empty_token(TOKEN_GT, out_token);
+                if (strcmp(">=", __word_buffer) == 0) return success_empty_token(TOKEN_GE, out_token);
                 if (strcmp("+", __word_buffer) == 0) return success_empty_token(TOKEN_PLUS, out_token);
+                if (strcmp("-", __word_buffer) == 0) return success_empty_token(TOKEN_MINUS, out_token);
+                if (strcmp("/", __word_buffer) == 0) return success_empty_token(TOKEN_DIV, out_token);
+
+                if (strcmp("/*", __word_buffer) == 0) /* UF */return success_empty_token(TOKEN_DIV, out_token);
+                if (strcmp("*/", __word_buffer) == 0) /* UF */return success_empty_token(TOKEN_DIV, out_token);
 
                 switch (new_character)
                 {
