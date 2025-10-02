@@ -49,7 +49,6 @@ void dispose_token(Token *token) {
 
 Token* get_empty_token(TokenType token_type){
     Token *token = malloc(sizeof(Token));
-    printf("teraz som alokoval token %d pre typ %i velkost %i \n", token, token_type, sizeof(Token));
     token->type = token_type;
     token->value = NULL;
     return token;
@@ -57,7 +56,6 @@ Token* get_empty_token(TokenType token_type){
 
 Token* get_token(TokenType token_type, char *value){
     Token *token = malloc(sizeof(Token));
-    printf("teraz som alokoval id text: %s \n", value);
     token->type = token_type;
     int value_length = strlen(value);
     token->value = malloc(value_length * sizeof(char));
@@ -97,14 +95,12 @@ int get_next_token(Token **out_token) {
         }
         
         char *trimmed_buffer = trim(__word_buffer);
-        printf("trimmnute: %s dlžka: %i pointer: %d mode: %d END\n", trimmed_buffer, strlen(trimmed_buffer), trimmed_buffer, automat_state);
 
         if (automat_state == STATE_TEXT) {
             if (isdigit(new_character) == 0 && isalpha(new_character) == 0) {
                 //ungetc(new_character, __input_file);
                 // skontroluj ci nieje identifikator
                 // 
-                printf("ked tento znak tak do: '%c'\n", new_character);
                 TokenType *reserved_word = string_to_token_type(trimmed_buffer);
                 if (reserved_word != NULL) {
                     return success_empty_token(*reserved_word, out_token); 
@@ -162,7 +158,6 @@ int get_next_token(Token **out_token) {
         __word_buffer[word_length] = '\0';
     }
     // TODO
-    printf("fakt EOF\n");
     return 99;
 }
 
