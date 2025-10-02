@@ -3,7 +3,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g
 
-# Ciele
+# Výsledný binár uložený o priečinok vyššie
 TARGET = scanner_tests
 
 # Zdrojové súbory
@@ -13,20 +13,27 @@ UTILS = $(wildcard ../utilities/*.c)
 # Hlavičkové súbory
 HEADERS = scanner.h token.h
 
-# Výsledný objekt
+# Objekty
 OBJ = $(SRC:.c=.o) $(UTILS:.c=.o)
 
 all: $(TARGET)
 
-# Kompilácia hlavného programu
+# Kompilácia bináru
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
-# Objekty zo zdrojov
-%.o: %.c $(HEADERS)
+# Kompilácia objektov
+# pre SRC
+scanner.o: scanner.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Vyčisti objektové súbory a výsledný binár
+tests/scanner_tests.o: tests/scanner_tests.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# pre UTILS
+../utilities/%.o: ../utilities/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
 	rm -f $(OBJ) $(TARGET)
 
