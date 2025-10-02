@@ -41,6 +41,7 @@ Token* get_empty_token(TokenType token_type);
 Token* get_token(TokenType token_type, char *value);
 int success_empty_token(TokenType token_type, Token **out_token);
 int success_token(TokenType token_type, char *value, Token **out_token);
+int is_valid_text_symbol(char c);
 
 void dispose_token(Token *token) {
     free(token->value);
@@ -97,7 +98,7 @@ int get_next_token(Token **out_token) {
         char *trimmed_buffer = trim(__word_buffer);
 
         if (automat_state == STATE_TEXT) {
-            if (isdigit(new_character) == 0 && isalpha(new_character) == 0) {
+            if (is_valid_text_symbol(new_character) == 0) {
                 //ungetc(new_character, __input_file);
                 // skontroluj ci nieje identifikator
                 // 
@@ -181,5 +182,10 @@ int success_token(TokenType token_type, char *value, Token **out_token) {
     Token *token = get_token(token_type, value);
     *out_token = token;
     free(__word_buffer);
+    return 0;
+}
+
+int is_valid_text_symbol(char c) {
+    if (isdigit(c) != 0 || isalpha(c) != 0 || c == '_') return 1;
     return 0;
 }
