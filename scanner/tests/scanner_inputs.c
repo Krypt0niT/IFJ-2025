@@ -123,14 +123,14 @@ int test7_expected_count = 10;
 
 // --- TEST Keyword-like identifiers ---
 char *test8_name = "(8) Keyword-like identifiers";
-char *test8_input = "var varx = 10\nifx1 = 20\n";
+char *test8_input = "var var_x = 10\nifclassx1 = 20\n";
 Token test8_expectation[] = {
     {TOKEN_VAR, NULL},
-    {TOKEN_ID, "varx"},
+    {TOKEN_ID, "var_x"},
     {TOKEN_ASSIGN, NULL},
     {TOKEN_INT_LITERAL, "10"},
     {TOKEN_LINE_END, NULL},
-    {TOKEN_ID, "ifx1"},
+    {TOKEN_ID, "ifclassx1"},
     {TOKEN_ASSIGN, NULL},
     {TOKEN_INT_LITERAL, "20"},
     {TOKEN_LINE_END, NULL}
@@ -263,8 +263,8 @@ int test15_expected_count = 7;
 
 
 // --- TEST If ---
-char *test16_name = "(16) If keyword, IS literal and String token";
-char *test16_input = "if (x is String)\n{\n}\n"; 
+char *test16_name = "(16) If keyword, IS literal and String, Num token";
+char *test16_input = "if (x is String)\n{\n}\nif(s is Num)"; 
 Token test16_expectation[] = {
     {TOKEN_IF, NULL},
     {TOKEN_LEFT_PAREN, NULL},
@@ -276,9 +276,15 @@ Token test16_expectation[] = {
     {TOKEN_LEFT_BRACE, NULL},
     {TOKEN_LINE_END, NULL},
     {TOKEN_RIGHT_BRACE, NULL},
-    {TOKEN_LINE_END, NULL}
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IF, NULL},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_ID, "s"},
+    {TOKEN_IS, NULL},
+    {TOKEN_NUM, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
 };
-int test16_expected_count = 11;
+int test16_expected_count = 17;
 
 // --- TEST Global var ---
 char *test17_name = "(17) Global var";
@@ -291,3 +297,123 @@ Token test17_expectation[] = {
     {TOKEN_LINE_END, NULL}
 };
 int test17_expected_count = 5;
+
+// --- TEST Else keyword ---
+char *test18_name = "(18) Else keyword";
+char *test18_input = "if (x) { } else { }\n";
+Token test18_expectation[] = {
+    {TOKEN_IF, NULL},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LEFT_BRACE, NULL},
+    {TOKEN_RIGHT_BRACE, NULL},
+    {TOKEN_ELSE, NULL},
+    {TOKEN_LEFT_BRACE, NULL},
+    {TOKEN_RIGHT_BRACE, NULL},
+    {TOKEN_LINE_END, NULL}
+};
+int test18_expected_count = 10;
+// ------------
+
+// --- TEST Null keyword and literal ---
+char *test19_name = "(19) Null keyword and literal";
+char *test19_input = "var x = null\nif (y is Null) { }\n";
+Token test19_expectation[] = {
+    {TOKEN_VAR, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_NULL_LITERAL, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_IF, NULL},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_ID, "y"},
+    {TOKEN_IS, NULL},
+    {TOKEN_NULL, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LEFT_BRACE, NULL},
+    {TOKEN_RIGHT_BRACE, NULL},
+    {TOKEN_LINE_END, NULL}
+};
+int test19_expected_count = 14;
+// ------------
+
+// --- TEST Return keyword ---
+char *test20_name = "(20) Return keyword";
+char *test20_input = "return foo(only_par, only_par)\nreturn x + y\nreturn\n";
+Token test20_expectation[] = {
+    {TOKEN_RETURN, NULL},
+    {TOKEN_ID, "foo"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_ID, "only_par"},
+    {TOKEN_ID, "only_par"},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_RETURN, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_PLUS, NULL},
+    {TOKEN_ID, "y"},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_RETURN, NULL},
+    {TOKEN_LINE_END, NULL}
+};
+int test20_expected_count = 14;
+// ------------
+
+// --- TEST While keyword ---
+char *test21_name = "(21) While keyword";
+char *test21_input = "while (x > 0) { x = x - 1 }\n";
+Token test21_expectation[] = {
+    {TOKEN_WHILE, NULL},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_GT, NULL},
+    {TOKEN_INT_LITERAL, "0"},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LEFT_BRACE, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_ASSIGN, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_MINUS, NULL},
+    {TOKEN_INT_LITERAL, "1"},
+    {TOKEN_RIGHT_BRACE, NULL},
+    {TOKEN_LINE_END, NULL}
+};
+int test21_expected_count = 14;
+// ------------
+
+// --- TEST Import keyword ---
+char *test22_name = "(22) Import & for keyword";
+char *test22_input = "import \"ifj25\" for Ifj\n";
+Token test22_expectation[] = {
+    {TOKEN_IMPORT, NULL},
+    {TOKEN_STRING_LITERAL, "ifj25"},
+    {TOKEN_FOR, NULL},
+    {TOKEN_IFJ, NULL},
+    {TOKEN_LINE_END, NULL}
+};
+int test22_expected_count = 5;
+// ------------
+
+// --- TEST Static keyword ---
+char *test23_name = "(23) Static keyword";
+char *test23_input = "static main() { }\nstatic func(x){}\n";
+Token test23_expectation[] = {
+    {TOKEN_STATIC, NULL},
+    {TOKEN_ID, "main"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LEFT_BRACE, NULL},
+    {TOKEN_RIGHT_BRACE, NULL},
+    {TOKEN_LINE_END, NULL},
+    {TOKEN_STATIC, NULL},
+    {TOKEN_ID, "func"},
+    {TOKEN_LEFT_PAREN, NULL},
+    {TOKEN_ID, "x"},
+    {TOKEN_RIGHT_PAREN, NULL},
+    {TOKEN_LEFT_BRACE, NULL},
+    {TOKEN_RIGHT_BRACE, NULL},
+    {TOKEN_LINE_END, NULL}
+};
+int test23_expected_count = 16;
+// ------------

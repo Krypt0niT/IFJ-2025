@@ -28,6 +28,12 @@ int main() {
         {test15_name, test15_input, test15_expectation, test15_expected_count},
         {test16_name, test16_input, test16_expectation, test16_expected_count},
         {test17_name, test17_input, test17_expectation, test17_expected_count},
+        {test18_name, test18_input, test18_expectation, test18_expected_count},
+        {test19_name, test19_input, test19_expectation, test19_expected_count},
+        {test20_name, test20_input, test20_expectation, test20_expected_count},
+        {test21_name, test21_input, test21_expectation, test21_expected_count},
+        {test22_name, test22_input, test22_expectation, test22_expected_count},
+        {test23_name, test23_input, test23_expectation, test23_expected_count},
     };
 
     int total = sizeof(tests)/sizeof(tests[0]);
