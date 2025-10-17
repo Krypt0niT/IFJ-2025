@@ -37,4 +37,8 @@ tests/scanner_tests.o: tests/scanner_tests.c $(HEADERS)
 clean:
 	rm -f $(OBJ) $(TARGET)
 
+run:
+	make
+	./scanner_tests
+
 .PHONY: all clean
