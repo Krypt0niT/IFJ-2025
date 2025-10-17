@@ -4,12 +4,18 @@
 #include "../scanner.h"
 #include "scanner_inputs.c"
 
+void runUnitTests();
 int runLexerTest(const LexerTest* test);
 int compareTokens(const Token* a, const Token* b);
 void print_token(Token *token);
 
 int main() {
 
+    runUnitTests();
+    return 0;
+}
+
+void runUnitTests() {
     LexerTest tests[] = {
         {test1_name, test1_input, test1_expectation, test1_expected_count},
         {test2_name, test2_input, test2_expectation, test2_expected_count},
@@ -49,8 +55,7 @@ int main() {
         if (runLexerTest(&tests[i])) passed++;
     }
 
-    printf("Passed %d/%d tests\n", passed, total);
-    return 0;
+    printf("Passed %d/%d scanner unit tests\n", passed, total);
 }
 
 int runLexerTest(const LexerTest* test) {
