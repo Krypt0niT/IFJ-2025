@@ -4,18 +4,18 @@
 #include "../scanner.h"
 #include "scanner_inputs.c"
 
-void runUnitTests();
-int runLexerTest(const LexerTest* test);
-int compareTokens(const Token* a, const Token* b);
+void run_unit_tests();
+int run_scanner_test(const LexerTest* test);
+int compare_tokens(const Token* a, const Token* b);
 void print_token(Token *token);
 
 int main() {
 
-    runUnitTests();
+    run_unit_tests();
     return 0;
 }
 
-void runUnitTests() {
+void run_unit_tests() {
     LexerTest tests[] = {
         {test1_name, test1_input, test1_expectation, test1_expected_count},
         {test2_name, test2_input, test2_expectation, test2_expected_count},
@@ -52,13 +52,13 @@ void runUnitTests() {
     int passed = 0;
 
     for (int i = 0; i < total; i++) {
-        if (runLexerTest(&tests[i])) passed++;
+        if (run_scanner_test(&tests[i])) passed++;
     }
 
     printf("Passed %d/%d scanner unit tests\n", passed, total);
 }
 
-int runLexerTest(const LexerTest* test) {
+int run_scanner_test(const LexerTest* test) {
 
     FILE *f = tmpfile();
     if (!f) return 1;
@@ -82,7 +82,7 @@ int runLexerTest(const LexerTest* test) {
             break;
         }
 
-        if (!compareTokens(tok, &test->expected[i])) {
+        if (!compare_tokens(tok, &test->expected[i])) {
             printf("[%s] Token mismatch at index %d\n", test->name, i);
             printf("Expected: "); print_token(&test->expected[i]);
             printf("Got:      "); print_token(tok);
@@ -114,7 +114,7 @@ int runLexerTest(const LexerTest* test) {
     return success;
 }
 
-int compareTokens(const Token* a, const Token* b) {
+int compare_tokens(const Token* a, const Token* b) {
     if (a->type != b->type) return 0;
     if ((a->value == NULL && b->value != NULL) || (a->value != NULL && b->value == NULL))
         return 0;
