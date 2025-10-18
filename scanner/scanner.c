@@ -153,10 +153,10 @@ int get_next_token(Token **out_token) {
             if (!is_valid_num_symbol(new_character)) {
                 ungetc(new_character, __input_file);
                 //TODO: return ci chyba alebo dobre format
-                TokenType *token_type;
-                int invalid = get_num_format(__word_buffer, token_type);
+                TokenType token_type;
+                int invalid = get_num_format(__word_buffer, &token_type);
                 if (invalid) return 1;
-                
+
                 return success_token(token_type, __word_buffer, out_token); 
             }
         }
