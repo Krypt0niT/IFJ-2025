@@ -46,6 +46,7 @@ int success_token(TokenType token_type, char *value, Token **out_token);
 int is_valid_text_symbol(char c);
 int is_valid_num_symbol(char c);
 int contains(char *array, char a);
+int get_num_format(char *array, TokenType *out_token);
 
 void dispose_token(Token *token) {
     free(token->value);
@@ -123,7 +124,7 @@ int get_next_token(Token **out_token) {
         // Defines how words start
         if (automat_state == STATE_NONE && !isspace(new_character)) {
             if (isalpha(new_character) != 0 || new_character == '_') automat_state = STATE_TEXT;
-            else if (isdigit(new_character) != 0) automat_state = STATE_NUM;
+            else if (isdigit(new_character)) automat_state = STATE_NUM;
             else if (new_character == '"') automat_state = STATE_STRING;
             else if (isdigit(new_character) == 0 && isalpha(new_character) == 0) automat_state = STATE_SYMBOL;
         }
@@ -149,10 +150,13 @@ int get_next_token(Token **out_token) {
         }
 
         if (automat_state == STATE_NUM) {
-            if (is_valid_num_symbol(new_character) == 0) {
+            if (!is_valid_num_symbol(new_character)) {
                 ungetc(new_character, __input_file);
                 //TODO: return ci chyba alebo dobre format
-                TokenType token_type = get_num_literal_type(__word_buffer);
+                TokenType *token_type;
+                int invalid = get_num_format(__word_buffer, token_type);
+                if (invalid) return 1;
+                
                 return success_token(token_type, __word_buffer, out_token); 
             }
         }
@@ -244,8 +248,16 @@ int is_valid_text_symbol(char c) {
 
 // TODO separate valid sybols
 int is_valid_num_symbol(char c) {
-    if (isdigit(c) != 0 || 
-        c == 'e' || 
+    if (isdigit(c) || 
+        isalpha(c) ||
+        c == '+' || 
+        c == '-' ||
+        c == '.'
+    ) 
+    return 1;
+    return 0;
+
+    /*c == 'e' || 
         c == 'E' || 
         c == '+' || 
         c == '-' ||
@@ -262,9 +274,7 @@ int is_valid_num_symbol(char c) {
         c == 'C' ||
         c == 'D' ||
         c == 'E' ||
-        c == 'F'
-    ) return 1;
-    return 0;
+        c == 'F'*/
 }
 
 // TODO funkcionalita skontrolovania nevalidneho vstuppu cisla .h?
@@ -286,4 +296,12 @@ int contains(char *array, char a) {
         if (array[i] == a) return 1;
     }
     return 0;
+}
+
+// funkcia bude overovat platnost formatu cisla
+// pri neplatnom cisle vrati nenulovy vystup 
+// na out token sa zavedie platny typ ciselneho literalu - hex, float, esp, int
+// priklad -> *out_token = TOKEN_INT_LITERAL;
+int get_num_format(char *array, TokenType *out_token) {
+    // TODO: Katka
 }
