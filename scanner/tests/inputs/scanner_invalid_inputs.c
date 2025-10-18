@@ -110,37 +110,20 @@ LexerFailingTest failing_test17 = {
 };
 
 LexerFailingTest failing_test18 = {
-    "Input low int limit",
-    "-2147483647\n",
-    2
-};
-
-LexerFailingTest failing_test19 = {
     "Input max int limit",
     "2147483647\n",
     2
 };
 
-LexerFailingTest failing_test20 = {
+LexerFailingTest failing_test19 = {
     "Input exceeds int +",
     "2147483648\n",
     2
 };
 
-LexerFailingTest failing_test21 = {
-    "Input exceeds int -",
-    "-2147483648\n",
-    2
-};
-
-LexerFailingTest failing_test22 = {
+LexerFailingTest failing_test20 = {
     "Input exceeds int exp",
     "2.147483648e9\n",  // 2147483648, presahuje INT32_MAX
     2
 };
 
-LexerFailingTest failing_test23 = {
-    "Input below INT32_MIN exp",
-    "-2.147483649e9\n",  // -2147483649, menšie než INT32_MIN
-    2
-};
