@@ -304,5 +304,62 @@ int contains(char *array, char a) {
 // na out token sa zavedie platny typ ciselneho literalu - hex, float, esp, int
 // priklad -> *out_token = TOKEN_INT_LITERAL;
 int get_num_format(char *array, TokenType *out_token) {
-    // TODO: Katka
+    unsigned len = strlen(array);
+    if(len == 4 && array[0] == '0' && (array[1] == 'x' || array[1] == 'X')){
+        for(unsigned i = 2; i< strlen(array); i++){
+            if(!((array[i] >= 'A' && array[i] <= 'F') || (array[i] >= 'a' && array[i] <= 'f') || (array[i] >= '0' && array[i] <= '9')))
+                return 1;
+        }
+        *out_token = TOKEN_HEX_LITERAL;
+        return 0;
+    }
+
+    // [celá_časť].[desatinná_časť]e[+/-][exponent]
+    // [celá_časť]e[+/-][exponent]
+    // counters
+    int has_dot = 0;
+    int has_exp = 0;
+    int exp_sign_allowed = 0;
+    int exp_digits = 0;
+
+    for (unsigned i = 0; i < len; i++) {
+        char c = array[i];
+
+        if (isdigit((unsigned char)c)) {
+            if (has_exp) exp_digits++;
+            continue;
+        }
+
+        // Bodka
+        if (c == '.') {
+            if (has_dot || has_exp) return 1;
+            has_dot = 1;
+            continue;
+        }
+
+        // Exponent
+        if (c == 'e' || c == 'E') {
+            if (has_exp) return 1; // viac exponentov
+            has_exp = 1;
+            exp_sign_allowed = 1; // po e môže byť + alebo -
+            exp_digits = 0;
+            continue;
+        }
+
+        // Znamienko po exponente
+        if ((c == '+' || c == '-') && exp_sign_allowed) {
+            exp_sign_allowed = 0;
+            continue;
+        }
+
+        // ak sa sem dostane, je to neplatny znak
+        return 1;
+    }
+
+    if (has_exp && exp_digits == 0) return 1;
+
+    else if (has_dot || has_exp) *out_token = TOKEN_FLOAT_LITERAL;
+    else *out_token = TOKEN_INT_LITERAL;
+    return 0;
+    
 }
