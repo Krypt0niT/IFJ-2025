@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include "scanner.h"
 #include "../utilities/trim.h"
 
@@ -14,7 +15,7 @@ static const TokenInfo tokenInfos[] = {
     {TOKEN_IF, "if"},
     {TOKEN_ELSE, "else"},
     {TOKEN_IS, "is"},
-    {TOKEN_NULL, "null"},
+    {TOKEN_NULL, "Null"},
     {TOKEN_RETURN, "return"},
     {TOKEN_VAR, "var"},
     {TOKEN_WHILE, "while"},
@@ -24,7 +25,7 @@ static const TokenInfo tokenInfos[] = {
     {TOKEN_FOR, "for"},
     {TOKEN_NUM, "Num"},
     {TOKEN_STRING, "String"},
-    {TOKEN_NULL_LITERAL, "Null"},
+    {TOKEN_NULL_LITERAL, "null"},
 };
 
 typedef enum {
@@ -67,6 +68,10 @@ Token* get_token(TokenType token_type, char *value){
     return token;
 }
 
+// TODO: remove later.
+unsigned int max_word_length_for_tests = 100; 
+bool is_comment = false;
+
 FILE *__input_file = NULL;
 char *__word_buffer = NULL;
 
@@ -83,13 +88,23 @@ int get_next_token(Token **out_token) {
     int word_buffer_size = 10;
     __word_buffer = calloc(word_buffer_size, sizeof(char));
 
-    int word_length = 0;
     StateType automat_state = STATE_NONE;
+    int word_length = 0;
     int c;
+
     while ((c = getc(__input_file)) != EOF) {
+
+        //printf("dlzka:%i state:%i char:'%c' word:'%s'\n", word_length, automat_state, c, __word_buffer);
+
+        //TODO: remove later.
+        if (word_length > max_word_length_for_tests) {
+            return 99;
+        }
+
         char new_character = c;
 
-        //printf("znak:'%c' string:'%s' stav:'%i'\n",new_character,__word_buffer, automat_state);
+        // ignored characters
+        if (new_character == ',') continue;
 
         // AGRESIVNE ZNAKY
         if (word_length == 0) {
@@ -105,7 +120,7 @@ int get_next_token(Token **out_token) {
         }
 
         // Defines how words start
-        if (automat_state == STATE_NONE && !isspace(new_character) && new_character != ',') {
+        if (automat_state == STATE_NONE && !isspace(new_character)) {
             if (isalpha(new_character) != 0 || new_character == '_') automat_state = STATE_TEXT;
             else if (isdigit(new_character) != 0) automat_state = STATE_NUM;
             else if (new_character == '"') automat_state = STATE_STRING;
@@ -113,7 +128,7 @@ int get_next_token(Token **out_token) {
         }
         
         if (automat_state == STATE_TEXT) {
-            if (is_valid_text_symbol(new_character) == 0) {
+            if (!is_valid_text_symbol(new_character)) {
                 ungetc(new_character, __input_file);
 
                 TokenType *reserved_word = string_to_token_type(__word_buffer);
@@ -122,6 +137,9 @@ int get_next_token(Token **out_token) {
                 }
 
                 // Global indentificator
+                if (strcmp(__word_buffer, "__") == 0) {
+                    return 1; 
+                }
                 if (strncmp("__", __word_buffer, 2) == 0) {
                     return success_token(TOKEN_GLOBAL_VAR, __word_buffer, out_token); 
                 }
@@ -154,10 +172,24 @@ int get_next_token(Token **out_token) {
                 if (strcmp("/", __word_buffer) == 0) return success_empty_token(TOKEN_DIV, out_token);
                 if (strcmp("*", __word_buffer) == 0) return success_empty_token(TOKEN_MUL, out_token);
 
-                if (strcmp("/*", __word_buffer) == 0) /* UF */return success_empty_token(TOKEN_DIV, out_token);
-                if (strcmp("*/", __word_buffer) == 0) /* UF */return success_empty_token(TOKEN_DIV, out_token);
+                // TODO !!
+                if (strcmp("//", __word_buffer) == 0) is_comment = true;
+                if (strcmp("/*", __word_buffer) == 0) is_comment = true;
+                if (strcmp("*/", __word_buffer) == 0) is_comment = true;
             }
         }
+
+        // TODO: remove
+        if (automat_state == STATE_STRING) {
+            fprintf(stderr, "Strings not implemented.\n");
+            return 98; // not implemented
+        }
+
+        if (is_comment) {
+            fprintf(stderr, "Comments not implemented.\n");
+            return 97; // not implemented
+        }
+
 
         // Pripisanie
         word_length++;

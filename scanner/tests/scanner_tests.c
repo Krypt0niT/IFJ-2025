@@ -5,13 +5,17 @@
 #include "scanner_inputs.c"
 
 void run_unit_tests();
+void run_failing_unit_tests();
+
 int run_scanner_test(const LexerTest* test);
+int run_failing_scanner_test(const LexerFailingTest* test);
+
 int compare_tokens(const Token* a, const Token* b);
 void print_token(Token *token);
 
 int main() {
-
     run_unit_tests();
+    run_failing_unit_tests();
     return 0;
 }
 
@@ -58,6 +62,19 @@ void run_unit_tests() {
     printf("Passed %d/%d scanner unit tests\n", passed, total);
 }
 
+void run_failing_unit_tests() {
+    LexerFailingTest tests[] = {};
+
+    int total = sizeof(tests)/sizeof(tests[0]);
+    int passed = 0;
+
+    for (int i = 0; i < total; i++) {
+        if (run_failing_scanner_test(&tests[i])) passed++;
+    }
+
+    printf("Passed %d/%d scanner unit tests\n", passed, total);
+}
+
 int run_scanner_test(const LexerTest* test) {
 
     FILE *f = tmpfile();
@@ -91,7 +108,7 @@ int run_scanner_test(const LexerTest* test) {
             break;
         }
 
-        dispose_token(tok); // uvoľníme ihneď
+        dispose_token(tok);
     }
 
     // skontrolujeme, či nie sú ďalšie neočakávané tokeny
@@ -112,6 +129,42 @@ int run_scanner_test(const LexerTest* test) {
 
     fclose(f);
     return success;
+}
+
+int run_failing_scanner_test(const LexerFailingTest* test) {
+
+    FILE *f = tmpfile();
+    if (!f) return 1;
+
+    fwrite(test->source, 1, strlen(test->source), f);
+    rewind(f);
+
+    if (!f) {
+        perror("fmemopen");
+        return 0;
+    }
+    scanner_init(f);
+
+    int fail = 0; // predpokladáme úspech
+
+    for (int i = 0; i < test->expected_count; i++) {
+        Token *tok = NULL;
+        if (get_next_token(&tok) != 0) {
+            printf("[%s] Unexpected end of input at token index %d\n", test->name, i);
+            fail = 1;
+        }
+        else {
+            dispose_token(tok);
+        }
+    }
+
+    if (fail) {
+        printf("\033[0;32m[%s] Test passed!\033[0m\n", test->name);
+
+    }
+
+    fclose(f);
+    return fail;
 }
 
 int compare_tokens(const Token* a, const Token* b) {

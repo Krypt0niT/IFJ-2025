@@ -8,6 +8,12 @@ typedef struct {
     int expected_count;    // počet očakávaných tokenov
 } LexerTest;
 
+typedef struct {
+    const char* name;      // názov testu
+    const char* source;    // vstupný zdroj
+    int expected_count;    // počet očakávaných tokenov
+} LexerFailingTest;
+
 
 // --- TEST Simple assignment --- 
 char *test1_name = "(1) Simple assignment";
