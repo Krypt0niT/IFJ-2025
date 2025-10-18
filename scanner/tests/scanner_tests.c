@@ -22,36 +22,37 @@ int main() {
 
 void run_unit_tests() {
     LexerTest tests[] = {
-        {test1_name, test1_input, test1_expectation, test1_expected_count},
-        {test2_name, test2_input, test2_expectation, test2_expected_count},
-        {test3_name, test3_input, test3_expectation, test3_expected_count},
-        {test4_name, test4_input, test4_expectation, test4_expected_count},
-        {test5_name, test5_input, test5_expectation, test5_expected_count},
-        {test6_name, test6_input, test6_expectation, test6_expected_count},
-        {test7_name, test7_input, test7_expectation, test7_expected_count},
-        {test8_name, test8_input, test8_expectation, test8_expected_count},
-        {test9_name, test9_input, test9_expectation, test9_expected_count},
-        {test10_name, test10_input, test10_expectation, test10_expected_count},
-        {test11_name, test11_input, test11_expectation, test11_expected_count},
-        {test12_name, test12_input, test12_expectation, test12_expected_count},
-        {test13_name, test13_input, test13_expectation, test13_expected_count},
-        {test14_name, test14_input, test14_expectation, test14_expected_count},
-        {test15_name, test15_input, test15_expectation, test15_expected_count},
-        {test16_name, test16_input, test16_expectation, test16_expected_count},
-        {test17_name, test17_input, test17_expectation, test17_expected_count},
-        {test18_name, test18_input, test18_expectation, test18_expected_count},
-        {test19_name, test19_input, test19_expectation, test19_expected_count},
-        {test20_name, test20_input, test20_expectation, test20_expected_count},
-        {test21_name, test21_input, test21_expectation, test21_expected_count},
-        {test22_name, test22_input, test22_expectation, test22_expected_count},
-        {test23_name, test23_input, test23_expectation, test23_expected_count},
-        {test24_name, test24_input, test24_expectation, test24_expected_count},
-        {test25_name, test25_input, test25_expectation, test25_expected_count},
-        {test26_name, test26_input, test26_expectation, test26_expected_count},
-        {test27_name, test27_input, test27_expectation, test27_expected_count},
-        {test28_name, test28_input, test28_expectation, test28_expected_count},
-        {test29_name, test29_input, test29_expectation, test29_expected_count},
+        test1,
+        test2,
+        test3,
+        test4,
+        test5,
+        test6,
+        test7,
+        test8,
+        test9,
+        test10,
+        test11,
+        test12,
+        test13,
+        test14,
+        test15,
+        test16,
+        test17,
+        test18,
+        test19,
+        test20,
+        test21,
+        test22,
+        test23,
+        test24,
+        test25,
+        test26,
+        test27,
+        test28,
+        test29
     };
+
 
     int total = sizeof(tests)/sizeof(tests[0]);
     int passed = 0;
@@ -65,9 +66,15 @@ void run_unit_tests() {
 
 void run_failing_unit_tests() {
     LexerFailingTest tests[] = {
-        {failing_test1_name, failing_test1_input, failing_test1_expected_count}
+        failing_test1,
+        failing_test2,
+        failing_test3,
+        failing_test4,
+        failing_test5,
+        failing_test6,
+        failing_test7,
+        failing_test8
     };
-
     int total = sizeof(tests)/sizeof(tests[0]);
     int passed = 0;
 
