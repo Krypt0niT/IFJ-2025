@@ -84,6 +84,7 @@ int get_next_token(Token **out_token) {
         // TODO zistit typ chyby
         return 99;
     }
+    is_comment = false;
 
     int word_buffer_size = 10;
     __word_buffer = calloc(word_buffer_size, sizeof(char));
