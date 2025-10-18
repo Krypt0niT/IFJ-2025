@@ -78,6 +78,10 @@ void run_failing_unit_tests() {
         failing_test10,
         failing_test11,
         failing_test12,
+        failing_test13,
+        failing_test14,
+        failing_test15,
+        failing_test16
     };
     int total = sizeof(tests)/sizeof(tests[0]);
     int passed = 0;

@@ -78,3 +78,27 @@ LexerFailingTest failing_test12 = {
     ".12e8\n",
     2
 };
+
+LexerFailingTest failing_test13 = {
+    "Invalid num format hex longer than 2 characters after x",
+    "0x158\n",
+    2
+};
+
+LexerFailingTest failing_test14 = {
+    "Invalid num format int is 00",
+    "00\n",
+    2
+};
+
+LexerFailingTest failing_test15 = {
+    "No string literal ending 1",
+    "\"asdasd\n",
+    2
+};
+
+LexerFailingTest failing_test16 = {
+    "No string literal ending 2",
+    "asdasd\"\n",
+    2
+};
