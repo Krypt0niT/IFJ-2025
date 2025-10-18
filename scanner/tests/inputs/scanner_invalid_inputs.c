@@ -102,3 +102,33 @@ LexerFailingTest failing_test16 = {
     "asdasd\"\n",
     2
 };
+
+LexerFailingTest failing_test17 = {
+    "Input is longer than integer limit",
+    "5646854684684864431213213\n",
+    2
+};
+
+LexerFailingTest failing_test18 = {
+    "Input low int limit",
+    "-2147483647\n",
+    2
+};
+
+LexerFailingTest failing_test19 = {
+    "Input max int limit",
+    "2147483647\n",
+    2
+};
+
+LexerFailingTest failing_test20 = {
+    "Input exceeds int +",
+    "2147483648\n",
+    2
+};
+
+LexerFailingTest failing_test21 = {
+    "Input exceeds int -",
+    "-2147483648\n",
+    2
+};
