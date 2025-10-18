@@ -162,9 +162,13 @@ int run_failing_scanner_test(const LexerFailingTest* test, int index) {
     int fail = 0;
     for (int i = 0; i < test->expected_count; i++) {
         Token *tok = NULL;
-        if (get_next_token(&tok) != 0) {
+        int result = get_next_token(&tok);
+        if (result == 1) {
             fail = 1;
             break;
+        }
+        else if (result != 0) {
+            fprintf(stderr, "Failing test failed with unexpected error.\n");
         }
         else {
             dispose_token(tok);
