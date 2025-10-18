@@ -305,6 +305,8 @@ int contains(char *array, char a) {
 // priklad -> *out_token = TOKEN_INT_LITERAL;
 int get_num_format(char *array, TokenType *out_token) {
     unsigned len = strlen(array);
+    if(array[0] == '0' && array[1] == '0')
+        return 1;
     if(len == 4 && array[0] == '0' && (array[1] == 'x' || array[1] == 'X')){
         for(unsigned i = 2; i< strlen(array); i++){
             if(!((array[i] >= 'A' && array[i] <= 'F') || (array[i] >= 'a' && array[i] <= 'f') || (array[i] >= '0' && array[i] <= '9')))
