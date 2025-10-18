@@ -8,8 +8,8 @@
 void run_unit_tests();
 void run_failing_unit_tests();
 
-int run_scanner_test(const LexerTest* test);
-int run_failing_scanner_test(const LexerFailingTest* test);
+int run_scanner_test(const LexerTest* test, int index);
+int run_failing_scanner_test(const LexerFailingTest* test, int index);
 
 int compare_tokens(const Token* a, const Token* b);
 void print_token(Token *token);
@@ -57,26 +57,28 @@ void run_unit_tests() {
     int passed = 0;
 
     for (int i = 0; i < total; i++) {
-        if (run_scanner_test(&tests[i])) passed++;
+        if (run_scanner_test(&tests[i], i + 1)) passed++;
     }
 
     printf("Passed %d/%d scanner unit tests\n", passed, total);
 }
 
 void run_failing_unit_tests() {
-    LexerFailingTest tests[] = {};
+    LexerFailingTest tests[] = {
+        {failing_test1_name, failing_test1_input, failing_test1_expected_count}
+    };
 
     int total = sizeof(tests)/sizeof(tests[0]);
     int passed = 0;
 
     for (int i = 0; i < total; i++) {
-        if (run_failing_scanner_test(&tests[i])) passed++;
+        if (run_failing_scanner_test(&tests[i], i + 1)) passed++;
     }
 
-    printf("Passed %d/%d scanner unit tests\n", passed, total);
+    printf("Passed %d/%d scanner failing unit tests\n", passed, total);
 }
 
-int run_scanner_test(const LexerTest* test) {
+int run_scanner_test(const LexerTest* test, int index) {
 
     FILE *f = tmpfile();
     if (!f) return 1;
@@ -116,7 +118,7 @@ int run_scanner_test(const LexerTest* test) {
     if (success) {
         Token *tok = NULL;
         if (get_next_token(&tok) == 0) {
-            printf("[%s] Extra unexpected token after expected tokens:\n", test->name);
+            printf("[(%i) %s] Extra unexpected token after expected tokens:\n",index, test->name);
             print_token(tok);
             dispose_token(tok);
             success = 0;
@@ -124,7 +126,7 @@ int run_scanner_test(const LexerTest* test) {
     }
 
     if (success) {
-        printf("\033[0;32m[%s] Test passed!\033[0m\n", test->name);
+        printf("\033[0;32m[(%i) %s] Test passed!\033[0m\n", index, test->name);
 
     }
 
@@ -132,7 +134,7 @@ int run_scanner_test(const LexerTest* test) {
     return success;
 }
 
-int run_failing_scanner_test(const LexerFailingTest* test) {
+int run_failing_scanner_test(const LexerFailingTest* test, int index) {
 
     FILE *f = tmpfile();
     if (!f) return 1;
@@ -146,13 +148,12 @@ int run_failing_scanner_test(const LexerFailingTest* test) {
     }
     scanner_init(f);
 
-    int fail = 0; // predpokladáme úspech
-
+    int fail = 0;
     for (int i = 0; i < test->expected_count; i++) {
         Token *tok = NULL;
         if (get_next_token(&tok) != 0) {
-            printf("[%s] Unexpected end of input at token index %d\n", test->name, i);
             fail = 1;
+            break;
         }
         else {
             dispose_token(tok);
@@ -160,7 +161,11 @@ int run_failing_scanner_test(const LexerFailingTest* test) {
     }
 
     if (fail) {
-        printf("\033[0;32m[%s] Test passed!\033[0m\n", test->name);
+        printf("\033[0;32m[(%i) %s] Test error caught!\033[0m\n", index, test->name);
+
+    }
+    else {
+        printf("[(%i) %s] Test did not caught error!\n", index, test->name);
 
     }
 

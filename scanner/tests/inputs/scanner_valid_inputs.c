@@ -9,7 +9,7 @@ typedef struct {
 } LexerTest;
 
 // --- TEST Simple assignment --- 
-char *test1_name = "(1) Simple assignment";
+char *test1_name = "Simple assignment";
 char *test1_input = "var x = y + 10\n";
 Token test1_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -24,7 +24,7 @@ int test1_expected_count = 7;
 // ------------
 
 // --- TEST Variable names with nums --- 
-char *test2_name = "(2) Variable names with nums";
+char *test2_name = "Variable names with nums";
 char *test2_input = "var x_2 = a1 + 10\n";
 Token test2_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -39,7 +39,7 @@ int test2_expected_count = 7;
 // ------------
 
 // --- TEST Whitespace troubleshooting --- 
-char *test3_name = "(3) Whitespace troubleshooting";
+char *test3_name = "Whitespace troubleshooting";
 char *test3_input = " \tvar  \tx=a +  10\n ";
 Token test3_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -54,7 +54,7 @@ int test3_expected_count = 7;
 // ------------
 
 // --- TEST Classic Numbers --- 
-char *test4_name = "(4) Classic Numbers";
+char *test4_name = "Classic Numbers";
 char *test4_input = "   var num = 12 +10.25 \n";
 Token test4_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -69,7 +69,7 @@ int test4_expected_count = 7;
 // ------------
 
 // --- TEST Exponential nums --- 
-char *test5_name = "(5) Exponential nums";
+char *test5_name = "Exponential nums";
 char *test5_input = "var num = 1.12e5 + 0.55E+2 + 0.58e-4 \n";
 Token test5_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -86,7 +86,7 @@ int test5_expected_count = 9;
 // ------------
 
 // --- TEST Hex nums --- 
-char *test6_name = "(6) Hex nums";
+char *test6_name = "Hex nums";
 char *test6_input = "var num = 0xdd + 0x1F + 0xAA\n";
 Token test6_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -103,7 +103,7 @@ int test6_expected_count = 9;
 // ------------
 
 // --- TEST Multiple newlines collapse to single EOL ---
-char *test7_name = "(7) Multiple newlines collapse to single EOL";
+char *test7_name = "Multiple newlines collapse to single EOL";
 char *test7_input = "\tvar a = 1\n\n\nvar b = 2\n";
 Token test7_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -121,7 +121,7 @@ int test7_expected_count = 10;
 // ------------
 
 // --- TEST Keyword-like identifiers ---
-char *test8_name = "(8) Keyword-like identifiers";
+char *test8_name = "Keyword-like identifiers";
 char *test8_input = "var var_x = 10\nifclassx1 = 20\n";
 Token test8_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -137,7 +137,7 @@ Token test8_expectation[] = {
 int test8_expected_count = 9;
 
 // --- TEST Function call with parentheses ---
-char *test9_name = "(9) Function call with parentheses";
+char *test9_name = "Function call with parentheses";
 char *test9_input = "var x = func(a, b)\n";
 Token test9_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -154,7 +154,7 @@ int test9_expected_count = 9;
 // ------------
 
 // --- TEST Complex identifiers ---
-char *test10_name = "(10) Complex identifiers";
+char *test10_name = "Complex identifiers";
 char *test10_input = "var _abc = 1\nvar XYZ__123 = 2\n";
 Token test10_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -170,7 +170,7 @@ Token test10_expectation[] = {
 };
 int test10_expected_count = 10;
 
-char *test11_name = "(11) String literals";
+char *test11_name = "String literals";
 char *test11_input = "var s = \"Ahoj\\n\\\"Sve'te \\\\\\x22\"\n";     // "\\" = "\"        "\x22" = 34 = "
 Token test11_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -181,7 +181,7 @@ Token test11_expectation[] = {
 };
 int test11_expected_count = 5;
 
-char *test12_name = "(12) Empty string and string with \n";
+char *test12_name = "Empty string and string with \n";
 char *test12_input = "var s = \"\"\nvar space = \"\\n\"\n";
 Token test12_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -198,7 +198,7 @@ Token test12_expectation[] = {
 int test12_expected_count = 10;
 
 // --- TEST Arithmetic operators ---
-char *test13_name = "(13) Arithmetic operators";
+char *test13_name = "Arithmetic operators";
 char *test13_input = "var x = 10 + 2 - 3 * 4 / 5\n";
 Token test13_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -220,7 +220,7 @@ int test13_expected_count = 13;
 
 
 // --- TEST Complex expression with parentheses ---
-char *test14_name = "(14) Complex expression with parentheses";
+char *test14_name = "Complex expression with parentheses";
 char *test14_input = "var result = ((a + b) * (c - d)) / e\n";
 Token test14_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -247,7 +247,7 @@ int test14_expected_count = 19;
 // ------------
 
 // --- TEST Class ---
-char *test15_name = "(15) Class keyword and Braces with newlines";
+char *test15_name = "Class keyword and Braces with newlines";
 char *test15_input = "class MyClass\n{\n}\n";
 Token test15_expectation[] = {
     {TOKEN_CLASS, NULL},
@@ -262,7 +262,7 @@ int test15_expected_count = 7;
 
 
 // --- TEST If ---
-char *test16_name = "(16) If keyword, IS literal and String, Num token";
+char *test16_name = "If keyword, IS literal and String, Num token";
 char *test16_input = "if (x is String)\n{\n}\nif(s is Num)\n"; 
 Token test16_expectation[] = {
     {TOKEN_IF, NULL},
@@ -287,7 +287,7 @@ Token test16_expectation[] = {
 int test16_expected_count = 18;
 
 // --- TEST Global var ---
-char *test17_name = "(17) Global var";
+char *test17_name = "Global var";
 char *test17_input = "var __g = 42\n";
 Token test17_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -317,7 +317,7 @@ int test18_expected_count = 10;
 // ------------
 
 // --- TEST Null keyword and literal ---
-char *test19_name = "(19) Null keyword and literal";
+char *test19_name = "Null keyword and literal";
 char *test19_input = "var x = null\nif (y is Null) { }\n";
 Token test19_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -339,7 +339,7 @@ int test19_expected_count = 14;
 // ------------
 
 // --- TEST Return keyword ---
-char *test20_name = "(20) Return keyword";
+char *test20_name = "Return keyword";
 char *test20_input = "return foo(only_par,\n only_par)\nreturn x + y\nreturn\n";
 Token test20_expectation[] = {
     {TOKEN_RETURN, NULL},
@@ -361,7 +361,7 @@ int test20_expected_count = 14;
 // ------------
 
 // --- TEST While keyword ---
-char *test21_name = "(21) While keyword";
+char *test21_name = "While keyword";
 char *test21_input = "while (x >\n 0) { x =\n x -\n 1 }\n";
 Token test21_expectation[] = {
     {TOKEN_WHILE, NULL},
@@ -383,7 +383,7 @@ int test21_expected_count = 14;
 // ------------
 
 // --- TEST Import keyword ---
-char *test22_name = "(22) Import & for keyword";
+char *test22_name = "Import & for keyword";
 char *test22_input = "import \"ifj25\" for Ifj\n";
 Token test22_expectation[] = {
     {TOKEN_IMPORT, NULL},
@@ -396,7 +396,7 @@ int test22_expected_count = 5;
 // ------------
 
 // --- TEST Static keyword ---
-char *test23_name = "(23) Static keyword";
+char *test23_name = "Static keyword";
 char *test23_input = "static main() { }\nstatic func(\nx){}\n";
 Token test23_expectation[] = {
     {TOKEN_STATIC, NULL},
@@ -419,7 +419,7 @@ int test23_expected_count = 16;
 // ------------
 
 // --- TEST Ifj vstavane funkcie ---
-char *test24_name = "(24) Ifj vstavane funkcie";
+char *test24_name = "Ifj vstavane funkcie";
 char *test24_input = 
     "Ifj.write(x)\n"
     "Ifj .  read_num()\n"
@@ -483,7 +483,7 @@ int test24_expected_count = 41;
 // ------------
 
 // --- TEST Relational operators with numbers ---
-char *test25_name = "(25) Relational operators with numbers";
+char *test25_name = "Relational operators with numbers";
 char *test25_input = "1 < 2 3.5 > 2.1 10 <= 10 5 >= 5 0 == 0 1 != 0\n";
 Token test25_expectation[] = {
     {TOKEN_INT_LITERAL, "1"},
@@ -510,7 +510,7 @@ int test25_expected_count = 19;
 // ------------
 
 // --- TEST Multiline string literal ---
-char *test26_name = "(26) Multiline string literal";
+char *test26_name = "Multiline string literal";
 char *test26_input = "var x = \"\"\"A\nhoj s\\x22\"vete\n\"\"\"\n";
 Token test26_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -541,7 +541,7 @@ int test27_expected_count = 10;
 // ------------
 
 // --- TEST Block comment single line ---
-char *test28_name = "(28) Block comment single line";
+char *test28_name = "Block comment single line";
 char *test28_input = "var x = 1 /* komentar */ var y = 2\n";
 Token test28_expectation[] = {
     {TOKEN_VAR, NULL},
@@ -558,7 +558,7 @@ int test28_expected_count = 9;
 // ------------
 
 // --- TEST Block comment multiline ---
-char *test29_name = "(29) Block comment multiline";
+char *test29_name = "Block comment multiline";
 char *test29_input = "var a = 1\n/* komentar\n na viac riadkov */\nvar b = 2\n";
 Token test29_expectation[] = {
     {TOKEN_VAR, NULL},
