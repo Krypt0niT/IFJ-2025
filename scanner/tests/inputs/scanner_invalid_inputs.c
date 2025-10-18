@@ -54,3 +54,27 @@ LexerFailingTest failing_test8 = {
     "1x00\n",
     2
 };
+
+LexerFailingTest failing_test9 = {
+    "Invalid num format hex starts with 00",
+    "00.1x00\n",
+    2
+};
+
+LexerFailingTest failing_test10 = {
+    "Invalid num format exp starts with 00",
+    "00.1e8\n",
+    2
+};
+
+LexerFailingTest failing_test11 = {
+    "Invalid num format exp has 2 periods",
+    "0.1.2e8\n",
+    2
+};
+
+LexerFailingTest failing_test12 = {
+    "Invalid num format exp starts with period",
+    ".12e8\n",
+    2
+};
