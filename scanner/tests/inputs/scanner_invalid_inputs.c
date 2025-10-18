@@ -132,3 +132,15 @@ LexerFailingTest failing_test21 = {
     "-2147483648\n",
     2
 };
+
+LexerFailingTest failing_test22 = {
+    "Input exceeds int exp",
+    "2.147483648e9\n",  // 2147483648, presahuje INT32_MAX
+    2
+};
+
+LexerFailingTest failing_test23 = {
+    "Input below INT32_MIN exp",
+    "-2.147483649e9\n",  // -2147483649, menšie než INT32_MIN
+    2
+};
