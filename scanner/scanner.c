@@ -100,6 +100,7 @@ int get_next_token(Token **out_token) {
 
         //TODO: remove later.
         if (word_length > max_word_length_for_tests) {
+            fprintf(stderr, "prekroceny limit bufferu.\n");
             return 99;
         }
 
