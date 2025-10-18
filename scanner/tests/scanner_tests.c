@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "../scanner.h"
-#include "scanner_inputs.c"
+#include "inputs/scanner_valid_inputs.c"
+#include "inputs/scanner_invalid_inputs.c"
 
 void run_unit_tests();
 void run_failing_unit_tests();
