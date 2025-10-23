@@ -5,30 +5,30 @@
 // Typy tokenov
 typedef enum {
     // --- Klucove slova ---
-    TOKEN_CLASS,// DONE -----------------------
-    TOKEN_IF,// DONE -----------------------
-    TOKEN_ELSE,// DONE -----------------------
-    TOKEN_IS,// DONE -----------------------
-    TOKEN_NULL,// DONE -----------------------
-    TOKEN_RETURN,// DONE -----------------------
-    TOKEN_VAR,// DONE -----------------------
-    TOKEN_WHILE,// DONE -----------------------
-    TOKEN_IFJ,// DONE -----------------------
-    TOKEN_STATIC,// DONE -----------------------
-    TOKEN_IMPORT,// DONE -----------------------
-    TOKEN_FOR,// DONE -----------------------
-    TOKEN_NUM,// DONE -----------------------
-    TOKEN_STRING,// DONE -----------------------
-    TOKEN_NULL_LITERAL,// DONE -----------------------
+    TOKEN_CLASS,
+    TOKEN_IF,
+    TOKEN_ELSE,
+    TOKEN_IS,
+    TOKEN_NULL,
+    TOKEN_RETURN,
+    TOKEN_VAR,
+    TOKEN_WHILE,
+    TOKEN_IFJ,
+    TOKEN_STATIC,
+    TOKEN_IMPORT,
+    TOKEN_FOR,
+    TOKEN_NUM,
+    TOKEN_STRING,
+    TOKEN_NULL_LITERAL,
 
     // --- Identifikator ---
-    TOKEN_ID,// DONE -----------------------
+    TOKEN_ID,
 
     // --- Priradenie ---
-    TOKEN_ASSIGN, // DONE -----------------------
+    TOKEN_ASSIGN,
 
     // --- Globalna premenna
-    TOKEN_GLOBAL_VAR,// DONE -----------------------
+    TOKEN_GLOBAL_VAR,
 
     // --- Literály ---
     TOKEN_INT_LITERAL,
@@ -37,27 +37,27 @@ typedef enum {
     TOKEN_FLOAT_LITERAL,
 
     // --- Aritmeticke operatory ---
-    TOKEN_PLUS,// DONE -----------------------
-    TOKEN_MINUS,// DONE -----------------------
-    TOKEN_MUL,// DONE -----------------------
-    TOKEN_DIV,// DONE -----------------------
+    TOKEN_PLUS,
+    TOKEN_MINUS,
+    TOKEN_MUL,
+    TOKEN_DIV,
 
     // --- Relacne operatory ---
-    TOKEN_LT,       // < DONE -----------------------
-    TOKEN_GT,       // > DONE -----------------------
-    TOKEN_LE,       // <= DONE -----------------------
-    TOKEN_GE,       // >= DONE -----------------------
-    TOKEN_EQ,       // == DONE -----------------------
-    TOKEN_NE,       // != DONE -----------------------
+    TOKEN_LT,       // < 
+    TOKEN_GT,       // >
+    TOKEN_LE,       // <=
+    TOKEN_GE,       // >=
+    TOKEN_EQ,       // ==
+    TOKEN_NE,       // !=
 
     // --- Zatvorky ---
-    TOKEN_LEFT_PAREN,   // (// DONE -----------------------
-    TOKEN_RIGHT_PAREN,  // )// DONE -----------------------
-    TOKEN_LEFT_BRACE,   // {// DONE -----------------------
-    TOKEN_RIGHT_BRACE,  // }// DONE -----------------------
+    TOKEN_LEFT_PAREN,   // (
+    TOKEN_RIGHT_PAREN,  // )
+    TOKEN_LEFT_BRACE,   // {
+    TOKEN_RIGHT_BRACE,  // }
 
     // --- KOniec riadku ---
-    TOKEN_LINE_END,// DONE -----------------------
+    TOKEN_LINE_END,
 
 } TokenType;
 
