@@ -54,8 +54,8 @@ typedef enum {
 typedef struct ASTNode {
     ASTNodeType type;
     char* value;
-    struct ASTNode* child;    // napr. condition pre if, prvý statement pre block
-    struct ASTNode* left;     // napr. then branch
-    struct ASTNode* right;    // napr. else branch
-    struct ASTNode* next;     // ďalší príkaz v tom istom bloku
+    struct ASTNode* child;
+    struct ASTNode* left;
+    struct ASTNode* right;
+    struct ASTNode* next;
 } ASTNode;

@@ -58,6 +58,8 @@ typedef enum {
 
     // --- KOniec riadku ---
     TOKEN_LINE_END,
+    
+    TOKEN_COUNT, // neplatna hodnota sluzi an urcenie poctu platnych typov
 
 } TokenType;
 
