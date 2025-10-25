@@ -107,9 +107,6 @@ int get_next_token(Token **out_token) {
 
         char new_character = c;
 
-        // ignored characters
-        if (new_character == ',') continue;
-
         // AGRESIVNE ZNAKY
         if (word_length == 0) {
             if (new_character == '\n') {
@@ -121,6 +118,7 @@ int get_next_token(Token **out_token) {
             if (new_character == ')') return success_empty_token(TOKEN_RIGHT_PAREN, out_token);
             if (new_character == '{') return success_empty_token(TOKEN_LEFT_BRACE, out_token);
             if (new_character == '}') return success_empty_token(TOKEN_RIGHT_BRACE, out_token);
+            if (new_character == ',') return success_empty_token(TOKEN_COMMA, out_token);
         }
 
         // Defines how words start

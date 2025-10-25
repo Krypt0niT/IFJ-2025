@@ -156,11 +156,12 @@ LexerTest test9 = {
         {TOKEN_ID, "func"},
         {TOKEN_LEFT_PAREN, NULL},
         {TOKEN_ID, "a"},
+        {TOKEN_COMMA, NULL},
         {TOKEN_ID, "b"},
         {TOKEN_RIGHT_PAREN, NULL},
         {TOKEN_LINE_END, NULL}
     },
-    9
+    10
 };
 
 // --- TEST Complex identifiers ---
@@ -373,6 +374,7 @@ LexerTest test20 = {
         {TOKEN_ID, "foo"},
         {TOKEN_LEFT_PAREN, NULL},
         {TOKEN_ID, "only_par"},
+        {TOKEN_COMMA, NULL},
         {TOKEN_ID, "only_par"},
         {TOKEN_RIGHT_PAREN, NULL},
         {TOKEN_LINE_END, NULL},
@@ -384,7 +386,7 @@ LexerTest test20 = {
         {TOKEN_RETURN, NULL},
         {TOKEN_LINE_END, NULL}
     },
-    14
+    15
 };
 
 // --- TEST While keyword ---

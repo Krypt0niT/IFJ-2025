@@ -56,6 +56,9 @@ typedef enum {
     TOKEN_LEFT_BRACE,   // {// DONE -----------------------
     TOKEN_RIGHT_BRACE,  // }// DONE -----------------------
 
+    // --- Ciarka ---
+    TOKEN_COMMA,
+    
     // --- KOniec riadku ---
     TOKEN_LINE_END,// DONE -----------------------
 
