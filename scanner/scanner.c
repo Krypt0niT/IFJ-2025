@@ -45,6 +45,7 @@ int success_empty_token(TokenType token_type, Token **out_token);
 int success_token(TokenType token_type, char *value, Token **out_token);
 int is_valid_text_symbol(char c);
 int is_valid_num_symbol(char c);
+int is_operator_char(char c);
 int contains(char *array, char a);
 int get_num_format(char *array, TokenType *out_token);
 
@@ -127,7 +128,8 @@ int get_next_token(Token **out_token) {
             if (isalpha(new_character) != 0 || new_character == '_') automat_state = STATE_TEXT;
             else if (isdigit(new_character)) automat_state = STATE_NUM;
             else if (new_character == '"') automat_state = STATE_STRING;
-            else if (isdigit(new_character) == 0 && isalpha(new_character) == 0) automat_state = STATE_SYMBOL;
+            else if (is_operator_char(new_character)) automat_state = STATE_SYMBOL;
+            else return 1;
         }
         
         if (automat_state == STATE_TEXT) {
@@ -299,6 +301,11 @@ int contains(char *array, char a) {
     return 0;
 }
 
+int is_operator_char(char c) {
+    return c == '=' || c == '/' || c == '*' || c == '-' ||
+           c == '+' || c == '!' || c == '<' || c == '>';
+}
+
 // funkcia bude overovat platnost formatu cisla
 // pri neplatnom cisle vrati nenulovy vystup 
 // na out token sa zavedie platny typ ciselneho literalu - hex, float, esp, int
@@ -306,8 +313,6 @@ int contains(char *array, char a) {
 int get_num_format(char *array, TokenType *out_token) {
     unsigned len = strlen(array);
     if(array[0] == '0' && array[1] == '0')
-        return 1;
-    if(array[0] == '.')
         return 1;
     if(len == 4 && array[0] == '0' && (array[1] == 'x' || array[1] == 'X')){
         for(unsigned i = 2; i< strlen(array); i++){
