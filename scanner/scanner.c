@@ -142,9 +142,6 @@ int get_next_token(Token **out_token) {
                 }
 
                 // Global indentificator
-                if (strcmp(__word_buffer, "__") == 0) {
-                    return 1; 
-                }
                 if (strncmp("__", __word_buffer, 2) == 0) {
                     return success_token(TOKEN_GLOBAL_VAR, __word_buffer, out_token); 
                 }
@@ -194,8 +191,34 @@ int get_next_token(Token **out_token) {
         }
 
         if (is_comment) {
-            fprintf(stderr, "Comments not implemented.\n");
-            return 97; // not implemented
+            if (strcmp(__word_buffer, "//") == 0) {
+                while ((c = getc(__input_file)) != '\n' && c != EOF);
+                if (c == '\n') ungetc(c, __input_file);
+                is_comment = false;
+                word_length = 0;
+                __word_buffer[0] = '\0';
+                automat_state = STATE_NONE;
+                continue;
+            }
+            if (strcmp(__word_buffer, "/*") == 0) {
+                int prev = 0;
+                while ((c = getc(__input_file)) != EOF) {
+                    if (prev == '*' && c == '/') break;
+                    prev = c;
+                }
+
+                // po ukonceni komentu preskoc jeden pripadny '\n'
+                c = getc(__input_file);
+                if (c != EOF && c != '\n')
+                    ungetc(c, __input_file);
+
+                is_comment = false;
+                word_length = 0;
+                __word_buffer[0] = '\0';
+                automat_state = STATE_NONE;
+                continue;
+            }
+            return 1;
         }
 
 
