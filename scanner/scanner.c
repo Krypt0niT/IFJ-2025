@@ -184,11 +184,81 @@ int get_next_token(Token **out_token) {
             }
         }
 
-        // TODO: remove
         if (automat_state == STATE_STRING) {
-            fprintf(stderr, "Strings not implemented.\n");
-            return 98; // not implemented
+            int quote_count = 1;
+            long pos = ftell(__input_file); // ulozime, aby sme sa dalo vratit spat (ak to multiline neni)
+            int c2 = getc(__input_file);
+            int c3 = getc(__input_file);
+
+            if (c2 == '"' && c3 == '"') {   // zistime, ci ide o multiline string ("""...""")
+                quote_count = 3;
+            } else {
+                // vrat spat dane znaky ak to nie je multiline
+                fseek(__input_file, pos, SEEK_SET);
+            }
+
+            char buffer[1024] = {0};
+            int buf_index = 0;
+            int prev = 0, quote_seen = 0;
+
+            while ((c = getc(__input_file)) != EOF) {
+                if (quote_count == 1) {
+                    // jednoriadkovy string
+                    if (c == '"' && prev != '\\') break;
+                }
+                else if (quote_count == 3) {
+                    // multiline string
+                    if (c == '"') {
+                        if (quote_seen == 2) break; // uz 3. uvodzovka
+                        quote_seen++;
+                    } else {  // pripad """Hello "" text "" world"""
+                        // ak nie je uvodzovka, resetujeme pocitadlo a pridame znak do bufferu
+                        if (quote_seen > 0) {
+                            // najprv pridame uvodzovky ktore sme uz nacitali - nie su este ukoncenie stringu
+                            for (int i = 0; i < quote_seen; i++) {
+                                buffer[buf_index++] = '"';
+                            }
+                            quote_seen = 0;
+                        }
+                        buffer[buf_index++] = (char)c;
+                    }
+                    continue;
+                }
+
+                if (c == '\n' && quote_count == 1) {
+                    return 1;
+                }
+
+                // spracovanie escape sekvencii
+                if (c == '\\') {
+                    int next = getc(__input_file);
+                    if (next == 'n') buffer[buf_index++] = '\n';
+                    else if (next == 't') buffer[buf_index++] = '\t';
+                    else if (next == '"') buffer[buf_index++] = '"';
+                    else if (next == '\\') buffer[buf_index++] = '\\';
+                    else if (next == 'x') {
+                        char hex[3] = {0};
+                        hex[0] = getc(__input_file);
+                        hex[1] = getc(__input_file);
+                        buffer[buf_index++] = (char) strtol(hex, NULL, 16);
+                    } 
+                    else {
+                        buffer[buf_index++] = (char)next;
+                    }
+                    continue;
+                }
+
+                buffer[buf_index++] = (char)c;
+                prev = c;
+            }
+
+            buffer[buf_index] = '\0';
+            *out_token = get_token(TOKEN_STRING_LITERAL, buffer);
+
+            free(__word_buffer);
+            return 0;
         }
+
 
         if (is_comment) {
             if (strcmp(__word_buffer, "//") == 0) {
