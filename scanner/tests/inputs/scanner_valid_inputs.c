@@ -390,7 +390,7 @@ LexerTest test20 = {
 // --- TEST While keyword ---
 LexerTest test21 = {
     "While keyword",
-    "while (x >\n 0) { x =\n x -\n 1 }\n",
+    "while (x >\n 0) { x = x -\n 1 }\n",
     (Token[]) {
         {TOKEN_WHILE, NULL},
         {TOKEN_LEFT_PAREN, NULL},
@@ -427,7 +427,7 @@ LexerTest test22 = {
 // --- TEST Static keyword ---
 LexerTest test23 = {
     "Static keyword",
-    "static main() { }\nstatic func(\nx){}\n",
+    "static main() { }\nstatic func(x){}\n",
     (Token[]) {
         {TOKEN_STATIC, NULL},
         {TOKEN_ID, "main"},
@@ -462,8 +462,7 @@ LexerTest test24 = {
     "Ifj.substring\n"
     "Ifj.\n"
     "\n"
-    "strcmp(\n"
-    ")\n"
+    "strcmp()\n"
     "Ifj.\t\tord()\n"
     "Ifj.chr()\n",
     (Token[]) {
